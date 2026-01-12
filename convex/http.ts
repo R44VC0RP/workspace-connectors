@@ -203,4 +203,83 @@ http.route({
   }),
 });
 
+/**
+ * Custom endpoint to get Microsoft OAuth tokens for a user.
+ * This handles token refresh if the access token is expired.
+ */
+http.route({
+  path: "/api/tokens/microsoft",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    try {
+      const body = await request.json();
+      const { userId } = body as { userId: string };
+
+      if (!userId) {
+        return new Response(JSON.stringify({ error: "userId is required" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+
+      // Get the stored tokens
+      const tokens = await ctx.runQuery(internal.tokens.getMicrosoftTokens, {
+        userId,
+      });
+
+      if (!tokens) {
+        return new Response(JSON.stringify({ error: "No Microsoft account linked" }), {
+          status: 404,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+
+      // Check if access token is expired (with 5 minute buffer)
+      const now = Date.now();
+      const expiresAt = tokens.accessTokenExpiresAt || 0;
+      const isExpired = expiresAt < now + 5 * 60 * 1000; // 5 minute buffer
+
+      if (isExpired && tokens.refreshToken) {
+        // Refresh the tokens
+        console.log("Microsoft access token expired, refreshing...");
+        const refreshed = await ctx.runAction(internal.tokens.refreshMicrosoftTokens, {
+          userId,
+        });
+
+        if (refreshed) {
+          return new Response(JSON.stringify({
+            accessToken: refreshed.accessToken,
+            refreshToken: tokens.refreshToken,
+            accessTokenExpiresAt: refreshed.expiresAt,
+          }), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          });
+        } else {
+          return new Response(JSON.stringify({ error: "Failed to refresh tokens" }), {
+            status: 500,
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+      }
+
+      // Return the current tokens
+      return new Response(JSON.stringify({
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+        accessTokenExpiresAt: tokens.accessTokenExpiresAt,
+      }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch (error) {
+      console.error("Error getting Microsoft tokens:", error);
+      return new Response(JSON.stringify({ error: "Internal server error" }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+  }),
+});
+
 export default http;

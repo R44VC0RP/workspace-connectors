@@ -30,6 +30,22 @@ const GOOGLE_SCOPES = [
   "https://www.googleapis.com/auth/calendar.events",   // Create/update/delete events
 ];
 
+// Microsoft Graph OAuth scopes for Outlook and Calendar access
+const MICROSOFT_SCOPES = [
+  "openid",
+  "profile",
+  "email",
+  "offline_access",                // Required for refresh tokens
+  "User.Read",                     // Basic user profile
+  // Mail scopes
+  "Mail.Read",                     // Read emails
+  "Mail.Send",                     // Send emails
+  "Mail.ReadWrite",                // Read/write emails, trash/untrash
+  // Calendar scopes
+  "Calendars.Read",                // Read calendars and events
+  "Calendars.ReadWrite",           // Create/update/delete events
+];
+
 // Scopes that require user re-authentication (added after initial launch)
 export const UPGRADED_SCOPES = [
   "https://www.googleapis.com/auth/gmail.modify",
@@ -45,14 +61,34 @@ export const createAuth = (ctx: GenericCtx<DataModel>) => {
   return betterAuth({
     baseURL: siteUrl,
     database: authComponent.adapter(ctx),
-    // Google OAuth with Gmail and Calendar scopes
+    // Account linking configuration
+    account: {
+      // Allow users to link multiple providers to the same account
+      accountLinking: {
+        enabled: true,
+        // Trust these providers for account linking (they verify email)
+        trustedProviders: ["google", "microsoft"],
+      },
+    },
+    // OAuth providers with workspace scopes
     socialProviders: {
+      // Google OAuth with Gmail and Calendar scopes
       google: {
         clientId: process.env.GOOGLE_CLIENT_ID!,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
         scope: GOOGLE_SCOPES,
         // Always get refresh token for API access
         accessType: "offline",
+        prompt: "consent",
+      },
+      // Microsoft OAuth with Outlook and Calendar scopes
+      microsoft: {
+        clientId: process.env.MICROSOFT_CLIENT_ID!,
+        clientSecret: process.env.MICROSOFT_CLIENT_SECRET!,
+        scope: MICROSOFT_SCOPES,
+        // Support both personal and work/school accounts
+        tenantId: "common",
+        // Always prompt for consent to ensure we get all scopes
         prompt: "consent",
       },
     },

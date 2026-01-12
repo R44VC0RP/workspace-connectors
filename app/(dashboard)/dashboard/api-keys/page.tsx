@@ -62,6 +62,15 @@ const AVAILABLE_SCOPES = {
     { id: "calendar:read", label: "Read calendar", description: "Read calendar events and free/busy info" },
     { id: "calendar:write", label: "Write calendar", description: "Create/update/delete events, quick add" },
   ],
+  microsoft: [
+    // Outlook Mail permissions
+    { id: "mail:read", label: "Read emails", description: "Read Outlook messages, conversations, and folders" },
+    { id: "mail:send", label: "Send emails", description: "Send emails via Outlook" },
+    { id: "mail:modify", label: "Modify emails", description: "Trash/untrash messages, move between folders, manage drafts" },
+    // Outlook Calendar permissions
+    { id: "calendar:read", label: "Read calendar", description: "Read calendar events and free/busy info" },
+    { id: "calendar:write", label: "Write calendar", description: "Create/update/delete events, respond to invitations" },
+  ],
 };
 
 interface ApiKeyData {
@@ -85,6 +94,9 @@ export default function ApiKeysPage() {
 
   // Check if user needs to re-authenticate for new scopes
   const needsReauth = useQuery(api.tokens.needsReauthentication);
+  
+  // Get linked accounts to know which providers are available
+  const linkedAccounts = useQuery(api.tokens.getLinkedAccounts);
 
   // Fetch keys on mount
   useEffect(() => {
@@ -181,7 +193,15 @@ export default function ApiKeysPage() {
     );
   };
 
+  // Check if a provider is connected
+  const isProviderConnected = (provider: string) => {
+    return linkedAccounts?.some((acc) => acc.provider === provider) ?? false;
+  };
+
   const toggleAllScopesForProvider = (provider: string) => {
+    // Don't allow toggling if provider isn't connected
+    if (!isProviderConnected(provider)) return;
+    
     const providerScopes = AVAILABLE_SCOPES[provider as keyof typeof AVAILABLE_SCOPES] || [];
     const availableScopes = providerScopes
       .filter((scope) => {
@@ -203,6 +223,9 @@ export default function ApiKeysPage() {
   };
 
   const areAllScopesSelectedForProvider = (provider: string): boolean | "indeterminate" => {
+    // If provider isn't connected, return false
+    if (!isProviderConnected(provider)) return false;
+    
     const providerScopes = AVAILABLE_SCOPES[provider as keyof typeof AVAILABLE_SCOPES] || [];
     const availableScopes = providerScopes
       .filter((scope) => {
@@ -299,24 +322,49 @@ export default function ApiKeysPage() {
                     <Label>Permissions</Label>
                     {Object.entries(AVAILABLE_SCOPES).map(([provider, scopes]) => {
                       const allSelectedState = areAllScopesSelectedForProvider(provider);
+                      // Check if this provider is connected
+                      const isProviderConnected = linkedAccounts?.some(
+                        (acc) => acc.provider === provider
+                      ) ?? false;
+                      
                       return (
-                      <div key={provider} className="space-y-2">
+                      <div key={provider} className={`space-y-2 ${!isProviderConnected ? "opacity-50" : ""}`}>
                         <div className="flex items-center space-x-2">
-                          <Checkbox
-                            id={`${provider}-all`}
-                            checked={allSelectedState === true}
-                            ref={(el) => {
-                              if (el) {
-                                (el as unknown as HTMLInputElement).indeterminate = allSelectedState === "indeterminate";
-                              }
-                            }}
-                            onCheckedChange={() => toggleAllScopesForProvider(provider)}
-                          />
+                          {isProviderConnected ? (
+                            <Checkbox
+                              id={`${provider}-all`}
+                              checked={allSelectedState === true}
+                              ref={(el) => {
+                                if (el) {
+                                  (el as unknown as HTMLInputElement).indeterminate = allSelectedState === "indeterminate";
+                                }
+                              }}
+                              onCheckedChange={() => toggleAllScopesForProvider(provider)}
+                            />
+                          ) : (
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <div className="h-4 w-4 flex items-center justify-center">
+                                    <IconLock className="h-3.5 w-3.5 text-muted-foreground" />
+                                  </div>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p className="text-xs">Connect your {provider === "google" ? "Google" : "Microsoft"} account first</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          )}
                           <label
                             htmlFor={`${provider}-all`}
-                            className="text-sm font-medium capitalize cursor-pointer"
+                            className={`text-sm font-medium ${isProviderConnected ? "cursor-pointer" : "cursor-not-allowed text-muted-foreground"}`}
                           >
-                            {provider}
+                            {provider === "google" ? "Google Workspace" : provider === "microsoft" ? "Microsoft 365" : provider}
+                            {!isProviderConnected && (
+                              <Badge variant="outline" className="ml-2 text-[10px] px-1 py-0">
+                                Not connected
+                              </Badge>
+                            )}
                           </label>
                         </div>
                         <div className="space-y-2 pl-6">
@@ -325,12 +373,15 @@ export default function ApiKeysPage() {
                             // Only show as locked if we've confirmed user needs re-auth (needsReauth === true)
                             // If needsReauth is undefined (still loading) or false, show as unlocked
                             const isLocked = "requiresReauth" in scope && scope.requiresReauth && needsReauth === true;
+                            // Provider not connected takes precedence
+                            const isDisabled = !isProviderConnected || isLocked;
+                            
                             return (
                               <div
                                 key={scopeId}
-                                className={`flex items-center space-x-2 ${isLocked ? "opacity-60" : ""}`}
+                                className={`flex items-center space-x-2 ${isDisabled ? "opacity-60" : ""}`}
                               >
-                                {isLocked ? (
+                                {isDisabled ? (
                                   <TooltipProvider>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
@@ -340,14 +391,21 @@ export default function ApiKeysPage() {
                                           </div>
                                           <span className="text-sm font-medium leading-none text-muted-foreground">
                                             {scope.label}
-                                            <Badge variant="outline" className="ml-2 text-[10px] px-1 py-0 text-amber-600 border-amber-500/50">
-                                              Re-auth required
-                                            </Badge>
+                                            {!isProviderConnected ? null : isLocked && (
+                                              <Badge variant="outline" className="ml-2 text-[10px] px-1 py-0 text-amber-600 border-amber-500/50">
+                                                Re-auth required
+                                              </Badge>
+                                            )}
                                           </span>
                                         </div>
                                       </TooltipTrigger>
                                       <TooltipContent>
-                                        <p className="text-xs">Sign out and sign back in to enable this permission</p>
+                                        <p className="text-xs">
+                                          {!isProviderConnected 
+                                            ? `Connect your ${provider === "google" ? "Google" : "Microsoft"} account first`
+                                            : "Sign out and sign back in to enable this permission"
+                                          }
+                                        </p>
                                       </TooltipContent>
                                     </Tooltip>
                                   </TooltipProvider>

@@ -1,7 +1,7 @@
 /**
  * API Key Permissions System
  * 
- * Defines granular permissions for Google Workspace API access.
+ * Defines granular permissions for Google Workspace and Microsoft 365 API access.
  * These permissions are stored in API key metadata and checked on each request.
  */
 
@@ -49,13 +49,43 @@ export const PERMISSIONS = {
       scope: "calendar.events",
     },
   },
+  microsoft: {
+    // Outlook Mail permissions
+    "mail:read": {
+      label: "Read emails",
+      description: "Read email messages, conversations, and folders",
+      scope: "Mail.Read",
+    },
+    "mail:send": {
+      label: "Send emails",
+      description: "Send new email messages",
+      scope: "Mail.Send",
+    },
+    "mail:modify": {
+      label: "Modify emails",
+      description: "Trash/untrash messages, move between folders, modify read status",
+      scope: "Mail.ReadWrite",
+    },
+    // Outlook Calendar permissions
+    "calendar:read": {
+      label: "Read calendar",
+      description: "Read calendar events and free/busy information",
+      scope: "Calendars.Read",
+    },
+    "calendar:write": {
+      label: "Write calendar",
+      description: "Create, update, and delete calendar events",
+      scope: "Calendars.ReadWrite",
+    },
+  },
 } as const;
 
 // Type for permission keys
 export type GooglePermission = keyof typeof PERMISSIONS.google;
+export type MicrosoftPermission = keyof typeof PERMISSIONS.microsoft;
 
-// Permission groups for common use cases
-export const PERMISSION_GROUPS = {
+// Permission groups for common use cases - Google
+export const GOOGLE_PERMISSION_GROUPS = {
   // Read-only access to both Gmail and Calendar
   readonly: ["mail:read", "calendar:read"] as GooglePermission[],
   
@@ -77,6 +107,30 @@ export const PERMISSION_GROUPS = {
   ] as GooglePermission[],
 };
 
+// Permission groups for common use cases - Microsoft
+export const MICROSOFT_PERMISSION_GROUPS = {
+  // Read-only access to both Outlook Mail and Calendar
+  readonly: ["mail:read", "calendar:read"] as MicrosoftPermission[],
+  
+  // Full Outlook Mail access (read, send, modify)
+  fullMail: ["mail:read", "mail:send", "mail:modify"] as MicrosoftPermission[],
+  
+  // Full Calendar access (read, write)
+  fullCalendar: ["calendar:read", "calendar:write"] as MicrosoftPermission[],
+  
+  // Full access to everything
+  fullAccess: [
+    "mail:read",
+    "mail:send",
+    "mail:modify",
+    "calendar:read",
+    "calendar:write",
+  ] as MicrosoftPermission[],
+};
+
+// Legacy alias for backwards compatibility
+export const PERMISSION_GROUPS = GOOGLE_PERMISSION_GROUPS;
+
 // Permissions that require upgraded OAuth scopes (user re-authentication)
 export const PERMISSIONS_REQUIRING_REAUTH: GooglePermission[] = [
   "mail:modify",
@@ -84,8 +138,8 @@ export const PERMISSIONS_REQUIRING_REAUTH: GooglePermission[] = [
   "mail:drafts",
 ];
 
-// OAuth scopes mapped to permissions
-export const SCOPE_TO_PERMISSIONS: Record<string, GooglePermission[]> = {
+// OAuth scopes mapped to permissions - Google
+export const GOOGLE_SCOPE_TO_PERMISSIONS: Record<string, GooglePermission[]> = {
   "https://www.googleapis.com/auth/gmail.readonly": ["mail:read"],
   "https://www.googleapis.com/auth/gmail.send": ["mail:send"],
   "https://www.googleapis.com/auth/gmail.modify": ["mail:modify"],
@@ -94,6 +148,18 @@ export const SCOPE_TO_PERMISSIONS: Record<string, GooglePermission[]> = {
   "https://www.googleapis.com/auth/calendar.readonly": ["calendar:read"],
   "https://www.googleapis.com/auth/calendar.events": ["calendar:write"],
 };
+
+// OAuth scopes mapped to permissions - Microsoft
+export const MICROSOFT_SCOPE_TO_PERMISSIONS: Record<string, MicrosoftPermission[]> = {
+  "Mail.Read": ["mail:read"],
+  "Mail.Send": ["mail:send"],
+  "Mail.ReadWrite": ["mail:modify"],
+  "Calendars.Read": ["calendar:read"],
+  "Calendars.ReadWrite": ["calendar:write"],
+};
+
+// Legacy alias for backwards compatibility
+export const SCOPE_TO_PERMISSIONS = GOOGLE_SCOPE_TO_PERMISSIONS;
 
 /**
  * Check if a user has a specific permission.

@@ -145,4 +145,52 @@ export async function getUserGoogleTokens(
   }
 }
 
+/**
+ * Get OAuth tokens for a user's linked Microsoft account.
+ * This queries Convex directly to get the stored tokens.
+ * If tokens are expired, it will attempt to refresh them.
+ */
+export async function getUserMicrosoftTokens(
+  userId: string
+): Promise<UserTokens | null> {
+  try {
+    const convexSiteUrl = process.env.NEXT_PUBLIC_CONVEX_SITE_URL;
+    if (!convexSiteUrl) {
+      console.error("NEXT_PUBLIC_CONVEX_SITE_URL not configured");
+      return null;
+    }
+
+    // Call our custom HTTP endpoint to get Microsoft tokens
+    const response = await fetch(`${convexSiteUrl}/api/tokens/microsoft`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("[getUserMicrosoftTokens] Failed to get user tokens:", response.status, errorText);
+      return null;
+    }
+
+    const data = await response.json();
+
+    if (!data.accessToken) {
+      console.error("[getUserMicrosoftTokens] No access token in response");
+      return null;
+    }
+
+    return {
+      accessToken: data.accessToken,
+      refreshToken: data.refreshToken || null,
+      expiresAt: data.accessTokenExpiresAt || null,
+    };
+  } catch (error) {
+    console.error("Get user Microsoft tokens error:", error);
+    return null;
+  }
+}
+
 
