@@ -1,6 +1,16 @@
 import { Elysia } from "elysia";
 import { swagger } from "@elysiajs/swagger";
 
+// Import providers - this triggers auto-registration and gives us config
+import "@/lib/providers";
+
+// Import registry utilities for dynamic OpenAPI configuration
+import {
+  getAllOpenApiTags,
+  getAllOpenApiTagGroups,
+} from "@/lib/providers";
+
+// Import routes directly - Elysia requires explicit imports for proper context
 import { googleMailRoutes } from "./routes/google/mail";
 import { googleCalendarRoutes } from "./routes/google/calendar";
 import { microsoftMailRoutes } from "./routes/microsoft/mail";
@@ -45,6 +55,10 @@ All errors return a consistent JSON format:
 | 500 | Internal server error |
 `;
 
+// Get OpenAPI tags from provider registry
+const tags = getAllOpenApiTags();
+const tagGroups = getAllOpenApiTagGroups();
+
 export const api = new Elysia({ prefix: "/api/v1" })
   .use(
     swagger({
@@ -55,58 +69,8 @@ export const api = new Elysia({ prefix: "/api/v1" })
           version: "1.0.0",
           description: API_DESCRIPTION,
         },
-        tags: [
-          { name: "System", description: "Health and status endpoints" },
-          // Google tags
-          { name: "Google Mail - Messages", description: "Gmail message operations" },
-          { name: "Google Mail - Labels", description: "Gmail label operations" },
-          { name: "Google Mail - Threads", description: "Gmail thread operations" },
-          { name: "Google Mail - Drafts", description: "Gmail draft operations" },
-          { name: "Google Calendar - Calendars", description: "Google Calendar calendar list operations" },
-          { name: "Google Calendar - Events", description: "Google Calendar event operations" },
-          { name: "Google Calendar - Free/Busy", description: "Google Calendar free/busy operations" },
-          // Microsoft tags
-          { name: "Microsoft Mail - Messages", description: "Outlook message operations" },
-          { name: "Microsoft Mail - Folders", description: "Outlook folder operations" },
-          { name: "Microsoft Mail - Conversations", description: "Outlook conversation operations" },
-          { name: "Microsoft Mail - Drafts", description: "Outlook draft operations" },
-          { name: "Microsoft Calendar - Calendars", description: "Outlook calendar list operations" },
-          { name: "Microsoft Calendar - Events", description: "Outlook event operations" },
-          { name: "Microsoft Calendar - Event Responses", description: "Outlook event response operations" },
-          { name: "Microsoft Calendar - Schedule", description: "Outlook free/busy operations" },
-        ],
-        // Tag groups for better organization in docs UI
-        "x-tagGroups": [
-          {
-            name: "System",
-            tags: ["System"],
-          },
-          {
-            name: "Google",
-            tags: [
-              "Google Mail - Messages",
-              "Google Mail - Labels",
-              "Google Mail - Threads",
-              "Google Mail - Drafts",
-              "Google Calendar - Calendars",
-              "Google Calendar - Events",
-              "Google Calendar - Free/Busy",
-            ],
-          },
-          {
-            name: "Microsoft",
-            tags: [
-              "Microsoft Mail - Messages",
-              "Microsoft Mail - Folders",
-              "Microsoft Mail - Conversations",
-              "Microsoft Mail - Drafts",
-              "Microsoft Calendar - Calendars",
-              "Microsoft Calendar - Events",
-              "Microsoft Calendar - Event Responses",
-              "Microsoft Calendar - Schedule",
-            ],
-          },
-        ],
+        tags,
+        "x-tagGroups": tagGroups,
         components: {
           securitySchemes: {
             bearerAuth: {
