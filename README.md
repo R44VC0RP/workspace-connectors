@@ -1,5 +1,8 @@
 # Workspace Connectors
 
+<img width="1082" height="809" alt="image" src="https://github.com/user-attachments/assets/a07ebc4b-3077-49d8-9cc3-e6cf5342fbf5" />
+
+
 A unified API for Google Workspace and Microsoft 365. Connect your Gmail, Outlook, and Calendar, generate scoped API keys, and integrate with any application.
 
 **Built by [Inbound](https://inbound.new?utm_source=workspace-connectors)**
