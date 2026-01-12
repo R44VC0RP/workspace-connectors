@@ -23,8 +23,9 @@ export default function Home() {
             </h1>
           </div>
           <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-            A unified API for Google Workspace. Connect your Gmail and Calendar,
-            generate scoped API keys, and integrate with any application.
+            A unified API for Google Workspace and Microsoft 365. Connect your
+            Gmail, Outlook, and Calendar, generate scoped API keys, and integrate
+            with any application.
           </p>
           <p className="mt-3 text-sm text-muted-foreground">
             Zero data retention — your data is never stored or logged.
