@@ -57,21 +57,55 @@ export const api = new Elysia({ prefix: "/api/v1" })
         },
         tags: [
           { name: "System", description: "Health and status endpoints" },
-          { name: "Gmail - Messages", description: "Gmail message operations" },
-          { name: "Gmail - Labels", description: "Gmail label operations" },
-          { name: "Gmail - Threads", description: "Gmail thread operations" },
-          { name: "Gmail - Drafts", description: "Gmail draft operations" },
-          { name: "Calendar - Calendars", description: "Google Calendar calendar list operations" },
-          { name: "Calendar - Events", description: "Google Calendar event operations" },
-          { name: "Calendar - Free/Busy", description: "Google Calendar free/busy operations" },
-          { name: "Outlook - Messages", description: "Microsoft Outlook message operations" },
-          { name: "Outlook - Folders", description: "Microsoft Outlook folder operations" },
-          { name: "Outlook - Conversations", description: "Microsoft Outlook conversation operations" },
-          { name: "Outlook - Drafts", description: "Microsoft Outlook draft operations" },
-          { name: "Outlook Calendar - Calendars", description: "Microsoft Outlook calendar list operations" },
-          { name: "Outlook Calendar - Events", description: "Microsoft Outlook event operations" },
-          { name: "Outlook Calendar - Event Responses", description: "Microsoft Outlook event response operations" },
-          { name: "Outlook Calendar - Schedule", description: "Microsoft Outlook free/busy operations" },
+          // Google tags
+          { name: "Google Mail - Messages", description: "Gmail message operations" },
+          { name: "Google Mail - Labels", description: "Gmail label operations" },
+          { name: "Google Mail - Threads", description: "Gmail thread operations" },
+          { name: "Google Mail - Drafts", description: "Gmail draft operations" },
+          { name: "Google Calendar - Calendars", description: "Google Calendar calendar list operations" },
+          { name: "Google Calendar - Events", description: "Google Calendar event operations" },
+          { name: "Google Calendar - Free/Busy", description: "Google Calendar free/busy operations" },
+          // Microsoft tags
+          { name: "Microsoft Mail - Messages", description: "Outlook message operations" },
+          { name: "Microsoft Mail - Folders", description: "Outlook folder operations" },
+          { name: "Microsoft Mail - Conversations", description: "Outlook conversation operations" },
+          { name: "Microsoft Mail - Drafts", description: "Outlook draft operations" },
+          { name: "Microsoft Calendar - Calendars", description: "Outlook calendar list operations" },
+          { name: "Microsoft Calendar - Events", description: "Outlook event operations" },
+          { name: "Microsoft Calendar - Event Responses", description: "Outlook event response operations" },
+          { name: "Microsoft Calendar - Schedule", description: "Outlook free/busy operations" },
+        ],
+        // Tag groups for better organization in docs UI
+        "x-tagGroups": [
+          {
+            name: "System",
+            tags: ["System"],
+          },
+          {
+            name: "Google",
+            tags: [
+              "Google Mail - Messages",
+              "Google Mail - Labels",
+              "Google Mail - Threads",
+              "Google Mail - Drafts",
+              "Google Calendar - Calendars",
+              "Google Calendar - Events",
+              "Google Calendar - Free/Busy",
+            ],
+          },
+          {
+            name: "Microsoft",
+            tags: [
+              "Microsoft Mail - Messages",
+              "Microsoft Mail - Folders",
+              "Microsoft Mail - Conversations",
+              "Microsoft Mail - Drafts",
+              "Microsoft Calendar - Calendars",
+              "Microsoft Calendar - Events",
+              "Microsoft Calendar - Event Responses",
+              "Microsoft Calendar - Schedule",
+            ],
+          },
         ],
         components: {
           securitySchemes: {
@@ -82,7 +116,7 @@ export const api = new Elysia({ prefix: "/api/v1" })
             },
           },
         },
-      },
+      } as Record<string, unknown>,
     })
   )
   // Health check (public)

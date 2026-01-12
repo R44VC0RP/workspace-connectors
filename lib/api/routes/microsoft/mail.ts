@@ -219,7 +219,7 @@ export const microsoftMailRoutes = new Elysia({ prefix: "/microsoft/mail" })
       detail: {
         summary: "List email messages",
         description: "Retrieve a list of email messages from Outlook. Requires `mail:read` permission.",
-        tags: ["Outlook - Messages"],
+        tags: ["Microsoft Mail - Messages"],
         security: [{ apiKey: [] }],
       },
     }
@@ -256,7 +256,7 @@ export const microsoftMailRoutes = new Elysia({ prefix: "/microsoft/mail" })
       detail: {
         summary: "Get email message",
         description: "Retrieve a specific email message by ID with full content. Requires `mail:read` permission.",
-        tags: ["Outlook - Messages"],
+        tags: ["Microsoft Mail - Messages"],
         security: [{ apiKey: [] }],
       },
     }
@@ -310,7 +310,7 @@ export const microsoftMailRoutes = new Elysia({ prefix: "/microsoft/mail" })
       detail: {
         summary: "Send email",
         description: "Send a new email message. Requires `mail:send` permission.",
-        tags: ["Outlook - Messages"],
+        tags: ["Microsoft Mail - Messages"],
         security: [{ apiKey: [] }],
       },
     }
@@ -363,7 +363,7 @@ export const microsoftMailRoutes = new Elysia({ prefix: "/microsoft/mail" })
       detail: {
         summary: "Modify message",
         description: "Modify message properties (read status, categories, flag). Requires `mail:modify` permission.",
-        tags: ["Outlook - Messages"],
+        tags: ["Microsoft Mail - Messages"],
         security: [{ apiKey: [] }],
       },
     }
@@ -406,7 +406,7 @@ export const microsoftMailRoutes = new Elysia({ prefix: "/microsoft/mail" })
       detail: {
         summary: "Move message",
         description: "Move a message to a different folder. Requires `mail:modify` permission.",
-        tags: ["Outlook - Messages"],
+        tags: ["Microsoft Mail - Messages"],
         security: [{ apiKey: [] }],
       },
     }
@@ -441,7 +441,7 @@ export const microsoftMailRoutes = new Elysia({ prefix: "/microsoft/mail" })
       detail: {
         summary: "Trash message",
         description: "Move a message to Deleted Items. Requires `mail:modify` permission.",
-        tags: ["Outlook - Messages"],
+        tags: ["Microsoft Mail - Messages"],
         security: [{ apiKey: [] }],
       },
     }
@@ -476,7 +476,7 @@ export const microsoftMailRoutes = new Elysia({ prefix: "/microsoft/mail" })
       detail: {
         summary: "Untrash message",
         description: "Move a message from Deleted Items back to Inbox. Requires `mail:modify` permission.",
-        tags: ["Outlook - Messages"],
+        tags: ["Microsoft Mail - Messages"],
         security: [{ apiKey: [] }],
       },
     }
@@ -510,7 +510,7 @@ export const microsoftMailRoutes = new Elysia({ prefix: "/microsoft/mail" })
       detail: {
         summary: "List folders",
         description: "Retrieve all mail folders in the user's mailbox. Requires `mail:read` permission.",
-        tags: ["Outlook - Folders"],
+        tags: ["Microsoft Mail - Folders"],
         security: [{ apiKey: [] }],
       },
     }
@@ -568,7 +568,7 @@ export const microsoftMailRoutes = new Elysia({ prefix: "/microsoft/mail" })
       detail: {
         summary: "Get well-known folder",
         description: "Retrieve a well-known folder by name. Requires `mail:read` permission.",
-        tags: ["Outlook - Folders"],
+        tags: ["Microsoft Mail - Folders"],
         security: [{ apiKey: [] }],
       },
     }
@@ -613,7 +613,7 @@ export const microsoftMailRoutes = new Elysia({ prefix: "/microsoft/mail" })
       detail: {
         summary: "Get folder",
         description: "Retrieve a specific folder by ID. Requires `mail:read` permission.",
-        tags: ["Outlook - Folders"],
+        tags: ["Microsoft Mail - Folders"],
         security: [{ apiKey: [] }],
       },
     }
@@ -655,7 +655,7 @@ export const microsoftMailRoutes = new Elysia({ prefix: "/microsoft/mail" })
       detail: {
         summary: "Create folder",
         description: "Create a new mail folder. Requires `mail:modify` permission.",
-        tags: ["Outlook - Folders"],
+        tags: ["Microsoft Mail - Folders"],
         security: [{ apiKey: [] }],
       },
     }
@@ -699,7 +699,7 @@ export const microsoftMailRoutes = new Elysia({ prefix: "/microsoft/mail" })
       detail: {
         summary: "Update folder",
         description: "Update a folder's name. Requires `mail:modify` permission.",
-        tags: ["Outlook - Folders"],
+        tags: ["Microsoft Mail - Folders"],
         security: [{ apiKey: [] }],
       },
     }
@@ -735,7 +735,7 @@ export const microsoftMailRoutes = new Elysia({ prefix: "/microsoft/mail" })
       detail: {
         summary: "Delete folder",
         description: "Delete a folder. Requires `mail:modify` permission.",
-        tags: ["Outlook - Folders"],
+        tags: ["Microsoft Mail - Folders"],
         security: [{ apiKey: [] }],
       },
     }
@@ -781,7 +781,7 @@ export const microsoftMailRoutes = new Elysia({ prefix: "/microsoft/mail" })
       detail: {
         summary: "List conversations",
         description: "Retrieve a list of email conversations. Requires `mail:read` permission.",
-        tags: ["Outlook - Conversations"],
+        tags: ["Microsoft Mail - Conversations"],
         security: [{ apiKey: [] }],
       },
     }
@@ -826,7 +826,7 @@ export const microsoftMailRoutes = new Elysia({ prefix: "/microsoft/mail" })
       detail: {
         summary: "Get conversation",
         description: "Retrieve a specific conversation with all messages. Requires `mail:read` permission.",
-        tags: ["Outlook - Conversations"],
+        tags: ["Microsoft Mail - Conversations"],
         security: [{ apiKey: [] }],
       },
     }
@@ -881,7 +881,7 @@ export const microsoftMailRoutes = new Elysia({ prefix: "/microsoft/mail" })
       detail: {
         summary: "Create draft",
         description: "Create a new draft message. Requires `mail:modify` permission.",
-        tags: ["Outlook - Drafts"],
+        tags: ["Microsoft Mail - Drafts"],
         security: [{ apiKey: [] }],
       },
     }
@@ -935,7 +935,7 @@ export const microsoftMailRoutes = new Elysia({ prefix: "/microsoft/mail" })
       detail: {
         summary: "Update draft",
         description: "Update an existing draft. Requires `mail:modify` permission.",
-        tags: ["Outlook - Drafts"],
+        tags: ["Microsoft Mail - Drafts"],
         security: [{ apiKey: [] }],
       },
     }
@@ -971,7 +971,7 @@ export const microsoftMailRoutes = new Elysia({ prefix: "/microsoft/mail" })
       detail: {
         summary: "Delete draft",
         description: "Delete a draft. Requires `mail:modify` permission.",
-        tags: ["Outlook - Drafts"],
+        tags: ["Microsoft Mail - Drafts"],
         security: [{ apiKey: [] }],
       },
     }
@@ -1007,7 +1007,7 @@ export const microsoftMailRoutes = new Elysia({ prefix: "/microsoft/mail" })
       detail: {
         summary: "Send draft",
         description: "Send a draft message. Requires `mail:send` permission.",
-        tags: ["Outlook - Drafts"],
+        tags: ["Microsoft Mail - Drafts"],
         security: [{ apiKey: [] }],
       },
     }

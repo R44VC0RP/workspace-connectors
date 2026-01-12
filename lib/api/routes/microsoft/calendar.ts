@@ -259,7 +259,7 @@ export const microsoftCalendarRoutes = new Elysia({ prefix: "/microsoft/calendar
       detail: {
         summary: "List calendars",
         description: "Retrieve all calendars the user has access to. Requires `calendar:read` permission.",
-        tags: ["Outlook Calendar - Calendars"],
+        tags: ["Microsoft Calendar - Calendars"],
         security: [{ apiKey: [] }],
       },
     }
@@ -304,7 +304,7 @@ export const microsoftCalendarRoutes = new Elysia({ prefix: "/microsoft/calendar
       detail: {
         summary: "Get calendar",
         description: "Retrieve a specific calendar by ID. Requires `calendar:read` permission.",
-        tags: ["Outlook Calendar - Calendars"],
+        tags: ["Microsoft Calendar - Calendars"],
         security: [{ apiKey: [] }],
       },
     }
@@ -346,7 +346,7 @@ export const microsoftCalendarRoutes = new Elysia({ prefix: "/microsoft/calendar
       detail: {
         summary: "Create calendar",
         description: "Create a new calendar. Requires `calendar:write` permission.",
-        tags: ["Outlook Calendar - Calendars"],
+        tags: ["Microsoft Calendar - Calendars"],
         security: [{ apiKey: [] }],
       },
     }
@@ -390,7 +390,7 @@ export const microsoftCalendarRoutes = new Elysia({ prefix: "/microsoft/calendar
       detail: {
         summary: "Update calendar",
         description: "Update a calendar. Requires `calendar:write` permission.",
-        tags: ["Outlook Calendar - Calendars"],
+        tags: ["Microsoft Calendar - Calendars"],
         security: [{ apiKey: [] }],
       },
     }
@@ -426,7 +426,7 @@ export const microsoftCalendarRoutes = new Elysia({ prefix: "/microsoft/calendar
       detail: {
         summary: "Delete calendar",
         description: "Delete a calendar. Requires `calendar:write` permission.",
-        tags: ["Outlook Calendar - Calendars"],
+        tags: ["Microsoft Calendar - Calendars"],
         security: [{ apiKey: [] }],
       },
     }
@@ -473,7 +473,7 @@ export const microsoftCalendarRoutes = new Elysia({ prefix: "/microsoft/calendar
         summary: "Get schedule (free/busy)",
         description:
           "Query free/busy information for one or more users. Requires `calendar:read` permission.",
-        tags: ["Outlook Calendar - Schedule"],
+        tags: ["Microsoft Calendar - Schedule"],
         security: [{ apiKey: [] }],
       },
     }
@@ -523,7 +523,7 @@ export const microsoftCalendarRoutes = new Elysia({ prefix: "/microsoft/calendar
       detail: {
         summary: "List calendar events",
         description: "Retrieve a list of calendar events. Requires `calendar:read` permission.",
-        tags: ["Outlook Calendar - Events"],
+        tags: ["Microsoft Calendar - Events"],
         security: [{ apiKey: [] }],
       },
     }
@@ -570,7 +570,7 @@ export const microsoftCalendarRoutes = new Elysia({ prefix: "/microsoft/calendar
         summary: "Get calendar view",
         description:
           "Get a view of events within a date range. Expands recurring events into instances. Requires `calendar:read` permission.",
-        tags: ["Outlook Calendar - Events"],
+        tags: ["Microsoft Calendar - Events"],
         security: [{ apiKey: [] }],
       },
     }
@@ -618,7 +618,7 @@ export const microsoftCalendarRoutes = new Elysia({ prefix: "/microsoft/calendar
       detail: {
         summary: "Get calendar event",
         description: "Retrieve a specific calendar event by ID. Requires `calendar:read` permission.",
-        tags: ["Outlook Calendar - Events"],
+        tags: ["Microsoft Calendar - Events"],
         security: [{ apiKey: [] }],
       },
     }
@@ -715,7 +715,7 @@ export const microsoftCalendarRoutes = new Elysia({ prefix: "/microsoft/calendar
       detail: {
         summary: "Create calendar event",
         description: "Create a new calendar event. Requires `calendar:write` permission.",
-        tags: ["Outlook Calendar - Events"],
+        tags: ["Microsoft Calendar - Events"],
         security: [{ apiKey: [] }],
       },
     }
@@ -817,7 +817,7 @@ export const microsoftCalendarRoutes = new Elysia({ prefix: "/microsoft/calendar
       detail: {
         summary: "Update calendar event",
         description: "Update an existing calendar event. Requires `calendar:write` permission.",
-        tags: ["Outlook Calendar - Events"],
+        tags: ["Microsoft Calendar - Events"],
         security: [{ apiKey: [] }],
       },
     }
@@ -856,7 +856,7 @@ export const microsoftCalendarRoutes = new Elysia({ prefix: "/microsoft/calendar
       detail: {
         summary: "Delete calendar event",
         description: "Delete a calendar event. Requires `calendar:write` permission.",
-        tags: ["Outlook Calendar - Events"],
+        tags: ["Microsoft Calendar - Events"],
         security: [{ apiKey: [] }],
       },
     }
@@ -906,7 +906,7 @@ export const microsoftCalendarRoutes = new Elysia({ prefix: "/microsoft/calendar
         summary: "Cancel event",
         description:
           "Cancel an event and notify attendees. Requires `calendar:write` permission.",
-        tags: ["Outlook Calendar - Events"],
+        tags: ["Microsoft Calendar - Events"],
         security: [{ apiKey: [] }],
       },
     }
@@ -959,7 +959,7 @@ export const microsoftCalendarRoutes = new Elysia({ prefix: "/microsoft/calendar
       detail: {
         summary: "Accept event invitation",
         description: "Accept a calendar event invitation. Requires `calendar:write` permission.",
-        tags: ["Outlook Calendar - Event Responses"],
+        tags: ["Microsoft Calendar - Event Responses"],
         security: [{ apiKey: [] }],
       },
     }
@@ -1010,7 +1010,7 @@ export const microsoftCalendarRoutes = new Elysia({ prefix: "/microsoft/calendar
       detail: {
         summary: "Decline event invitation",
         description: "Decline a calendar event invitation. Requires `calendar:write` permission.",
-        tags: ["Outlook Calendar - Event Responses"],
+        tags: ["Microsoft Calendar - Event Responses"],
         security: [{ apiKey: [] }],
       },
     }
@@ -1062,7 +1062,7 @@ export const microsoftCalendarRoutes = new Elysia({ prefix: "/microsoft/calendar
         summary: "Tentatively accept event",
         description:
           "Tentatively accept a calendar event invitation. Requires `calendar:write` permission.",
-        tags: ["Outlook Calendar - Event Responses"],
+        tags: ["Microsoft Calendar - Event Responses"],
         security: [{ apiKey: [] }],
       },
     }

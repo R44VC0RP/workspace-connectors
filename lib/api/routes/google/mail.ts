@@ -248,7 +248,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "List email messages",
         description: "Retrieve a list of email messages from Gmail. Requires `mail:read` permission.",
-        tags: ["Gmail - Messages"],
+        tags: ["Google Mail - Messages"],
         security: [{ apiKey: [] }],
       },
     }
@@ -285,7 +285,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "Get email message",
         description: "Retrieve a specific email message by ID with full content. Requires `mail:read` permission.",
-        tags: ["Gmail - Messages"],
+        tags: ["Google Mail - Messages"],
         security: [{ apiKey: [] }],
       },
     }
@@ -337,7 +337,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "Send email",
         description: "Send a new email message. Requires `mail:send` permission.",
-        tags: ["Gmail - Messages"],
+        tags: ["Google Mail - Messages"],
         security: [{ apiKey: [] }],
       },
     }
@@ -380,7 +380,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "Modify message labels",
         description: "Add or remove labels from a message. Requires `mail:modify` permission.",
-        tags: ["Gmail - Messages"],
+        tags: ["Google Mail - Messages"],
         security: [{ apiKey: [] }],
       },
     }
@@ -415,7 +415,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "Trash message",
         description: "Move a message to the trash. Requires `mail:modify` permission.",
-        tags: ["Gmail - Messages"],
+        tags: ["Google Mail - Messages"],
         security: [{ apiKey: [] }],
       },
     }
@@ -450,7 +450,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "Untrash message",
         description: "Remove a message from the trash. Requires `mail:modify` permission.",
-        tags: ["Gmail - Messages"],
+        tags: ["Google Mail - Messages"],
         security: [{ apiKey: [] }],
       },
     }
@@ -484,7 +484,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "List labels",
         description: "Retrieve all labels in the user's mailbox. Requires `mail:read` permission.",
-        tags: ["Gmail - Labels"],
+        tags: ["Google Mail - Labels"],
         security: [{ apiKey: [] }],
       },
     }
@@ -529,7 +529,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "Get label",
         description: "Retrieve a specific label by ID. Requires `mail:read` permission.",
-        tags: ["Gmail - Labels"],
+        tags: ["Google Mail - Labels"],
         security: [{ apiKey: [] }],
       },
     }
@@ -581,7 +581,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "Create label",
         description: "Create a new label. Requires `mail:labels` permission.",
-        tags: ["Gmail - Labels"],
+        tags: ["Google Mail - Labels"],
         security: [{ apiKey: [] }],
       },
     }
@@ -636,7 +636,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "Update label",
         description: "Update an existing label. Requires `mail:labels` permission.",
-        tags: ["Gmail - Labels"],
+        tags: ["Google Mail - Labels"],
         security: [{ apiKey: [] }],
       },
     }
@@ -672,7 +672,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "Delete label",
         description: "Delete a label. Requires `mail:labels` permission.",
-        tags: ["Gmail - Labels"],
+        tags: ["Google Mail - Labels"],
         security: [{ apiKey: [] }],
       },
     }
@@ -722,7 +722,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "List threads",
         description: "Retrieve a list of email threads. Requires `mail:read` permission.",
-        tags: ["Gmail - Threads"],
+        tags: ["Google Mail - Threads"],
         security: [{ apiKey: [] }],
       },
     }
@@ -767,7 +767,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "Get thread",
         description: "Retrieve a specific thread with all messages. Requires `mail:read` permission.",
-        tags: ["Gmail - Threads"],
+        tags: ["Google Mail - Threads"],
         security: [{ apiKey: [] }],
       },
     }
@@ -810,7 +810,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "Modify thread labels",
         description: "Add or remove labels from all messages in a thread. Requires `mail:modify` permission.",
-        tags: ["Gmail - Threads"],
+        tags: ["Google Mail - Threads"],
         security: [{ apiKey: [] }],
       },
     }
@@ -845,7 +845,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "Trash thread",
         description: "Move all messages in a thread to the trash. Requires `mail:modify` permission.",
-        tags: ["Gmail - Threads"],
+        tags: ["Google Mail - Threads"],
         security: [{ apiKey: [] }],
       },
     }
@@ -880,7 +880,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "Untrash thread",
         description: "Remove all messages in a thread from the trash. Requires `mail:modify` permission.",
-        tags: ["Gmail - Threads"],
+        tags: ["Google Mail - Threads"],
         security: [{ apiKey: [] }],
       },
     }
@@ -924,7 +924,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "List drafts",
         description: "Retrieve a list of draft messages. Requires `mail:drafts` permission.",
-        tags: ["Gmail - Drafts"],
+        tags: ["Google Mail - Drafts"],
         security: [{ apiKey: [] }],
       },
     }
@@ -969,7 +969,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "Get draft",
         description: "Retrieve a specific draft by ID. Requires `mail:drafts` permission.",
-        tags: ["Gmail - Drafts"],
+        tags: ["Google Mail - Drafts"],
         security: [{ apiKey: [] }],
       },
     }
@@ -1022,7 +1022,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "Create draft",
         description: "Create a new draft message. Requires `mail:drafts` permission.",
-        tags: ["Gmail - Drafts"],
+        tags: ["Google Mail - Drafts"],
         security: [{ apiKey: [] }],
       },
     }
@@ -1078,7 +1078,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "Update draft",
         description: "Update an existing draft. Requires `mail:drafts` permission.",
-        tags: ["Gmail - Drafts"],
+        tags: ["Google Mail - Drafts"],
         security: [{ apiKey: [] }],
       },
     }
@@ -1114,7 +1114,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "Delete draft",
         description: "Delete a draft. Requires `mail:drafts` permission.",
-        tags: ["Gmail - Drafts"],
+        tags: ["Google Mail - Drafts"],
         security: [{ apiKey: [] }],
       },
     }
@@ -1150,7 +1150,7 @@ export const googleMailRoutes = new Elysia({ prefix: "/google/mail" })
       detail: {
         summary: "Send draft",
         description: "Send a draft message. Requires `mail:drafts` permission.",
-        tags: ["Gmail - Drafts"],
+        tags: ["Google Mail - Drafts"],
         security: [{ apiKey: [] }],
       },
     }

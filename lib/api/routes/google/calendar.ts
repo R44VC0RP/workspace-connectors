@@ -208,7 +208,7 @@ export const googleCalendarRoutes = new Elysia({ prefix: "/google/calendar" })
       detail: {
         summary: "List calendars",
         description: "Retrieve all calendars the user has access to. Requires `calendar:read` permission.",
-        tags: ["Calendar - Calendars"],
+        tags: ["Google Calendar - Calendars"],
         security: [{ apiKey: [] }],
       },
     }
@@ -253,7 +253,7 @@ export const googleCalendarRoutes = new Elysia({ prefix: "/google/calendar" })
       detail: {
         summary: "Get calendar",
         description: "Retrieve a specific calendar by ID. Requires `calendar:read` permission.",
-        tags: ["Calendar - Calendars"],
+        tags: ["Google Calendar - Calendars"],
         security: [{ apiKey: [] }],
       },
     }
@@ -305,7 +305,7 @@ export const googleCalendarRoutes = new Elysia({ prefix: "/google/calendar" })
         summary: "Query free/busy",
         description:
           "Query free/busy information for one or more calendars. Requires `calendar:read` permission.",
-        tags: ["Calendar - Free/Busy"],
+        tags: ["Google Calendar - Free/Busy"],
         security: [{ apiKey: [] }],
       },
     }
@@ -355,7 +355,7 @@ export const googleCalendarRoutes = new Elysia({ prefix: "/google/calendar" })
       detail: {
         summary: "List calendar events",
         description: "Retrieve a list of calendar events. Requires `calendar:read` permission.",
-        tags: ["Calendar - Events"],
+        tags: ["Google Calendar - Events"],
         security: [{ apiKey: [] }],
       },
     }
@@ -407,7 +407,7 @@ export const googleCalendarRoutes = new Elysia({ prefix: "/google/calendar" })
       detail: {
         summary: "Get calendar event",
         description: "Retrieve a specific calendar event by ID. Requires `calendar:read` permission.",
-        tags: ["Calendar - Events"],
+        tags: ["Google Calendar - Events"],
         security: [{ apiKey: [] }],
       },
     }
@@ -476,7 +476,7 @@ export const googleCalendarRoutes = new Elysia({ prefix: "/google/calendar" })
       detail: {
         summary: "Create calendar event",
         description: "Create a new calendar event. Requires `calendar:write` permission.",
-        tags: ["Calendar - Events"],
+        tags: ["Google Calendar - Events"],
         security: [{ apiKey: [] }],
       },
     }
@@ -527,7 +527,7 @@ export const googleCalendarRoutes = new Elysia({ prefix: "/google/calendar" })
         summary: "Quick add event",
         description:
           "Create an event from natural language text. Google Calendar parses the text to extract event details. Requires `calendar:write` permission.",
-        tags: ["Calendar - Events"],
+        tags: ["Google Calendar - Events"],
         security: [{ apiKey: [] }],
       },
     }
@@ -599,7 +599,7 @@ export const googleCalendarRoutes = new Elysia({ prefix: "/google/calendar" })
       detail: {
         summary: "Update calendar event",
         description: "Update an existing calendar event. Requires `calendar:write` permission.",
-        tags: ["Calendar - Events"],
+        tags: ["Google Calendar - Events"],
         security: [{ apiKey: [] }],
       },
     }
@@ -647,7 +647,7 @@ export const googleCalendarRoutes = new Elysia({ prefix: "/google/calendar" })
       detail: {
         summary: "Delete calendar event",
         description: "Delete a calendar event. Requires `calendar:write` permission.",
-        tags: ["Calendar - Events"],
+        tags: ["Google Calendar - Events"],
         security: [{ apiKey: [] }],
       },
     }
