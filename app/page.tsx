@@ -22,6 +22,9 @@ export default function Home() {
             A unified API for Google Workspace. Connect your Gmail and Calendar,
             generate scoped API keys, and integrate with any application.
           </p>
+          <p className="mt-3 text-sm text-muted-foreground">
+            Zero data retention — your data is never stored or logged.
+          </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Button asChild size="lg">
               <Link href="/login">

@@ -7,6 +7,8 @@ import { googleCalendarRoutes } from "./routes/google/calendar";
 const API_DESCRIPTION = `
 API for accessing connected Google Workspace services.
 
+**Zero Data Retention** — Your data is never stored or logged by our servers. All requests are proxied directly to Google APIs.
+
 ## Authentication
 
 All API requests require an API key passed as a Bearer token in the \`Authorization\` header:
