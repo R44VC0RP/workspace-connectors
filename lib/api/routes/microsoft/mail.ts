@@ -123,8 +123,17 @@ const ConversationDetailSchema = t.Object({
  */
 const msMailAuth = new Elysia({ name: "ms-mail-auth" }).macro({
   msMailAuth: {
-    async resolve({ headers, status, set }) {
-      const authHeader = headers["authorization"];
+    async resolve(context) {
+      const { request, status, set } = context;
+      
+      // Get headers - try context.headers first, fall back to request.headers
+      let authHeader: string | null | undefined = null;
+      if (context.headers) {
+        authHeader = context.headers["authorization"];
+      } else if (request?.headers) {
+        authHeader = request.headers.get("authorization");
+      }
+      
       const apiKeyHeader = authHeader?.startsWith("Bearer ")
         ? authHeader.slice(7)
         : null;
