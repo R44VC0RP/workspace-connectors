@@ -1,0 +1,93 @@
+/**
+ * {{PROVIDER_NAME}} Provider Configuration
+ *
+ * Self-contained configuration for the {{PROVIDER_NAME}} provider.
+ * This file defines all OAuth, permissions, and metadata.
+ *
+ * To use this template:
+ * 1. Copy this directory to lib/providers/{{provider_id}}/
+ * 2. Rename this file to config.ts
+ * 3. Replace all {{PLACEHOLDERS}} with actual values
+ * 4. Update index.ts with your services and routes
+ */
+
+import type { PermissionDefinition, OAuthConfig, ProviderUIConfig } from "../core/types";
+
+// ============================================================================
+// OAuth Configuration
+// ============================================================================
+
+export const {{PROVIDER_UPPER}}_SCOPES = [
+  // Add OAuth scopes required for your provider
+  // Example: "openid", "profile", "email", "read:messages"
+];
+
+export const {{provider_id}}OAuthConfig: OAuthConfig = {
+  clientId: process.env.{{PROVIDER_UPPER}}_CLIENT_ID || "",
+  clientSecret: process.env.{{PROVIDER_UPPER}}_CLIENT_SECRET || "",
+  scopes: {{PROVIDER_UPPER}}_SCOPES,
+  tokenEndpoint: "https://{{provider}}.example.com/oauth/token",
+  authorizationEndpoint: "https://{{provider}}.example.com/oauth/authorize",
+  additionalParams: {
+    // Add any additional OAuth parameters
+    // Example: access_type: "offline"
+  },
+};
+
+// ============================================================================
+// UI Configuration
+// ============================================================================
+
+export const {{provider_id}}UIConfig: ProviderUIConfig = {
+  name: "{{PROVIDER_NAME}}",
+  description: "Access {{PROVIDER_NAME}} services",
+  icon: "{{ProviderName}}Logo", // Component name reference
+  color: "#000000", // Brand color
+};
+
+// ============================================================================
+// Permissions
+// ============================================================================
+
+export const {{provider_id}}Permissions: Record<string, PermissionDefinition> = {
+  // Define permissions that map to OAuth scopes
+  // Format: "service:action"
+  
+  // Example for a messaging service:
+  // "messages:read": {
+  //   label: "Read messages",
+  //   description: "Read messages and conversations",
+  //   scope: "messages.read",
+  // },
+  // "messages:send": {
+  //   label: "Send messages",
+  //   description: "Send new messages",
+  //   scope: "messages.write",
+  // },
+};
+
+export const {{provider_id}}PermissionGroups: Record<string, string[]> = {
+  // Common permission bundles
+  // readonly: ["messages:read"],
+  // fullAccess: ["messages:read", "messages:send"],
+};
+
+export const {{provider_id}}ScopeToPermissions: Record<string, string[]> = {
+  // Map full OAuth scopes to permission keys
+  // "https://api.example.com/messages.read": ["messages:read"],
+};
+
+// ============================================================================
+// OpenAPI Tags
+// ============================================================================
+
+export const {{provider_id}}OpenApiTags = [
+  // Add tags for API documentation
+  // { name: "{{PROVIDER_NAME}} - Messages", description: "Message operations" },
+];
+
+// ============================================================================
+// Type Exports
+// ============================================================================
+
+export type {{ProviderName}}Permission = keyof typeof {{provider_id}}Permissions;

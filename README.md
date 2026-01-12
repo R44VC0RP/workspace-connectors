@@ -174,6 +174,11 @@ convex/
   http.ts            # Custom HTTP endpoints
   tokens.ts          # Token management
 lib/
+  providers/         # Modular provider system
+    core/            # Provider registry and types
+    google/          # Google provider config
+    microsoft/       # Microsoft provider config
+    _template/       # Template for new providers
   api/               # Elysia API setup and routes
   services/
     google/          # Gmail and Google Calendar services
@@ -185,6 +190,31 @@ components/
 public/
   llms.txt           # LLM-friendly API documentation
 ```
+
+## Adding New Providers
+
+The codebase uses a modular provider system that makes it easy to add new OAuth providers (Slack, Notion, Zoom, etc.).
+
+### Quick Start
+
+1. Copy the template:
+   ```bash
+   cp -r lib/providers/_template lib/providers/slack
+   ```
+
+2. Configure the provider in `config.ts`:
+   - OAuth settings (scopes, endpoints)
+   - Permissions (what the provider can do)
+   - UI metadata (name, icon, description)
+
+3. Wire up services and routes in `index.ts`
+
+4. Register by adding to `lib/providers/index.ts`:
+   ```typescript
+   import "./slack";
+   ```
+
+See [lib/providers/ARCHITECTURE.md](lib/providers/ARCHITECTURE.md) for full documentation.
 
 ## Contributing
 

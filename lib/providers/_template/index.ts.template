@@ -1,0 +1,85 @@
+/**
+ * {{PROVIDER_NAME}} Provider
+ *
+ * Main entry point for the {{PROVIDER_NAME}} provider.
+ * Registers the provider with all its configuration, services, and routes.
+ *
+ * To use this template:
+ * 1. Rename to index.ts
+ * 2. Create your services in lib/services/{{provider_id}}/
+ * 3. Create your routes in lib/api/routes/{{provider_id}}/
+ * 4. Import and wire everything up below
+ * 5. Add `import "./{{provider_id}}"` to lib/providers/index.ts
+ */
+
+import type { ProviderConfig } from "../core/types";
+import { providerRegistry } from "../core/registry";
+import {
+  {{provider_id}}OAuthConfig,
+  {{provider_id}}UIConfig,
+  {{provider_id}}Permissions,
+  {{provider_id}}PermissionGroups,
+  {{provider_id}}ScopeToPermissions,
+  {{provider_id}}OpenApiTags,
+} from "./config";
+
+// ============================================================================
+// Import Services
+// ============================================================================
+// Create your service modules in lib/services/{{provider_id}}/
+// Example:
+// import * as messagesService from "@/lib/services/{{provider_id}}/messages";
+
+// ============================================================================
+// Import Routes
+// ============================================================================
+// Create your route modules in lib/api/routes/{{provider_id}}/
+// Example:
+// import { {{provider_id}}MessagesRoutes } from "@/lib/api/routes/{{provider_id}}/messages";
+
+// ============================================================================
+// Provider Definition
+// ============================================================================
+
+export const {{provider_id}}Provider: ProviderConfig = {
+  id: "{{provider_id}}",
+
+  ui: {{provider_id}}UIConfig,
+
+  oauth: {{provider_id}}OAuthConfig,
+
+  permissions: {{provider_id}}Permissions,
+
+  permissionGroups: {{provider_id}}PermissionGroups,
+
+  scopeToPermissions: {{provider_id}}ScopeToPermissions,
+
+  services: {
+    // Add your service modules here
+    // Example:
+    // messages: messagesService,
+  },
+
+  routes: {
+    // Add your Elysia route plugins here
+    // Example:
+    // messages: {{provider_id}}MessagesRoutes,
+  },
+
+  openApiTags: {{provider_id}}OpenApiTags,
+};
+
+// ============================================================================
+// Registration
+// ============================================================================
+
+// Auto-register when this module is imported
+providerRegistry.register({{provider_id}}Provider);
+
+// ============================================================================
+// Exports
+// ============================================================================
+
+export * from "./config";
+// Export service modules for direct access
+// export { messagesService };
