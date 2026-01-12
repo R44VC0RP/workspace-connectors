@@ -20,9 +20,7 @@ import {
 import * as outlookService from "@/lib/services/microsoft/outlook";
 import * as calendarService from "@/lib/services/microsoft/calendar";
 
-// Import existing routes
-import { microsoftMailRoutes } from "@/lib/api/routes/microsoft/mail";
-import { microsoftCalendarRoutes } from "@/lib/api/routes/microsoft/calendar";
+// Note: Routes are imported directly in lib/api/index.ts to avoid circular dependencies
 
 // ============================================================================
 // Provider Definition
@@ -47,8 +45,7 @@ export const microsoftProvider: ProviderConfig = {
   },
 
   routes: {
-    mail: microsoftMailRoutes,
-    calendar: microsoftCalendarRoutes,
+    // Routes are mounted explicitly in lib/api/index.ts
   },
 
   openApiTags: microsoftOpenApiTags,

@@ -2,7 +2,7 @@
  * Google Provider
  *
  * Main entry point for the Google Workspace provider.
- * Registers the provider with all its configuration, services, and routes.
+ * Registers the provider with all its configuration and services.
  */
 
 import type { ProviderConfig } from "../core/types";
@@ -20,9 +20,7 @@ import {
 import * as gmailService from "@/lib/services/google/gmail";
 import * as calendarService from "@/lib/services/google/calendar";
 
-// Import existing routes
-import { googleMailRoutes } from "@/lib/api/routes/google/mail";
-import { googleCalendarRoutes } from "@/lib/api/routes/google/calendar";
+// Note: Routes are imported directly in lib/api/index.ts to avoid circular dependencies
 
 // ============================================================================
 // Provider Definition
@@ -47,8 +45,7 @@ export const googleProvider: ProviderConfig = {
   },
 
   routes: {
-    mail: googleMailRoutes,
-    calendar: googleCalendarRoutes,
+    // Routes are mounted explicitly in lib/api/index.ts
   },
 
   openApiTags: googleOpenApiTags,
