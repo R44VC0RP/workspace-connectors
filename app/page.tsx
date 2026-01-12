@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { IconExternalLink, IconArrowRight } from "@tabler/icons-react";
+import { IconExternalLink, IconArrowRight, IconBrandGithub } from "@tabler/icons-react";
 
 import { Button } from "@/components/ui/button";
 import { CodeExamples } from "@/components/code-examples";
@@ -33,6 +33,16 @@ export default function Home() {
               <Link href="/api/v1/docs" target="_blank">
                 API Documentation
                 <IconExternalLink className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <Link
+                href="https://github.com/R44VC0RP/workspace-connectors"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <IconBrandGithub className="mr-2 h-4 w-4" />
+                GitHub
               </Link>
             </Button>
           </div>
