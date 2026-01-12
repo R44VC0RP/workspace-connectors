@@ -1,15 +1,20 @@
 import { Elysia } from "elysia";
 import { swagger } from "@elysiajs/swagger";
 
-// Import providers - this triggers auto-registration
+// Import providers - this triggers auto-registration and gives us config
 import "@/lib/providers";
 
 // Import registry utilities for dynamic configuration
 import {
   getAllOpenApiTags,
   getAllOpenApiTagGroups,
-  getAllRoutes,
 } from "@/lib/providers";
+
+// Import routes directly - Elysia works better with explicit imports
+import { googleMailRoutes } from "./routes/google/mail";
+import { googleCalendarRoutes } from "./routes/google/calendar";
+import { microsoftMailRoutes } from "./routes/microsoft/mail";
+import { microsoftCalendarRoutes } from "./routes/microsoft/calendar";
 
 const API_DESCRIPTION = `
 API for accessing connected Google Workspace and Microsoft 365 services.
@@ -50,62 +55,53 @@ All errors return a consistent JSON format:
 | 500 | Internal server error |
 `;
 
-// Build the API with dynamic provider registration
-function buildApi() {
-  // Get tags and tag groups from all registered providers
-  const tags = getAllOpenApiTags();
-  const tagGroups = getAllOpenApiTagGroups();
-  const routes = getAllRoutes();
+// Get tags and tag groups from all registered providers
+const tags = getAllOpenApiTags();
+const tagGroups = getAllOpenApiTagGroups();
 
-  // Create base API with swagger
-  let api = new Elysia({ prefix: "/api/v1" })
-    .use(
-      swagger({
-        path: "/docs",
-        documentation: {
-          info: {
-            title: "Workspace Connectors API",
-            version: "1.0.0",
-            description: API_DESCRIPTION,
-          },
-          tags,
-          "x-tagGroups": tagGroups,
-          components: {
-            securitySchemes: {
-              bearerAuth: {
-                type: "http",
-                scheme: "bearer",
-                description: "API key as Bearer token",
-              },
+export const api = new Elysia({ prefix: "/api/v1" })
+  .use(
+    swagger({
+      path: "/docs",
+      documentation: {
+        info: {
+          title: "Workspace Connectors API",
+          version: "1.0.0",
+          description: API_DESCRIPTION,
+        },
+        tags,
+        "x-tagGroups": tagGroups,
+        components: {
+          securitySchemes: {
+            bearerAuth: {
+              type: "http",
+              scheme: "bearer",
+              description: "API key as Bearer token",
             },
           },
-        } as Record<string, unknown>,
-      })
-    )
-    // Health check (public)
-    .get(
-      "/health",
-      () => ({
-        status: "ok",
-        timestamp: new Date().toISOString(),
-      }),
-      {
-        detail: {
-          summary: "Health check",
-          tags: ["System"],
         },
-      }
-    );
-
-  // Mount all provider routes dynamically
-  for (const route of routes) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    api = api.use(route as any);
-  }
-
-  return api;
-}
-
-export const api = buildApi();
+      } as Record<string, unknown>,
+    })
+  )
+  // Health check (public)
+  .get(
+    "/health",
+    () => ({
+      status: "ok",
+      timestamp: new Date().toISOString(),
+    }),
+    {
+      detail: {
+        summary: "Health check",
+        tags: ["System"],
+      },
+    }
+  )
+  // Mount Google routes
+  .use(googleMailRoutes)
+  .use(googleCalendarRoutes)
+  // Mount Microsoft routes
+  .use(microsoftMailRoutes)
+  .use(microsoftCalendarRoutes);
 
 export type Api = typeof api;
