@@ -33,6 +33,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable}>
+      <head>
+        <script
+          defer
+          data-website-id="dfid_yttwQB7mHggk4A8l35Pp7"
+          data-domain="inbound.new"
+          data-allowed-hostnames="workspace.inboundemail.com"
+          src="https://datafa.st/js/script.js"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
