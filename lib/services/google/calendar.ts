@@ -229,3 +229,200 @@ export async function deleteEvent(
     sendUpdates,
   });
 }
+
+// ============================================================================
+// Calendar List (requires calendar.readonly scope)
+// ============================================================================
+
+export interface CalendarListEntry {
+  id: string;
+  summary: string;
+  description?: string;
+  location?: string;
+  timeZone?: string;
+  colorId?: string;
+  backgroundColor?: string;
+  foregroundColor?: string;
+  accessRole: "freeBusyReader" | "reader" | "writer" | "owner";
+  primary?: boolean;
+}
+
+export interface CalendarListResult {
+  calendars: CalendarListEntry[];
+  nextPageToken?: string;
+}
+
+export interface CalendarListOptions {
+  maxResults?: number;
+  pageToken?: string;
+  showDeleted?: boolean;
+  showHidden?: boolean;
+}
+
+/**
+ * List all calendars the user has access to.
+ */
+export async function listCalendars(
+  accessToken: string,
+  options: CalendarListOptions = {}
+): Promise<CalendarListResult> {
+  const calendar = getCalendarClient(accessToken);
+
+  const response = await calendar.calendarList.list({
+    maxResults: options.maxResults || 100,
+    pageToken: options.pageToken,
+    showDeleted: options.showDeleted,
+    showHidden: options.showHidden,
+  });
+
+  const calendars: CalendarListEntry[] = (response.data.items || []).map(
+    (cal) => ({
+      id: cal.id || "",
+      summary: cal.summary || "",
+      description: cal.description ?? undefined,
+      location: cal.location ?? undefined,
+      timeZone: cal.timeZone ?? undefined,
+      colorId: cal.colorId ?? undefined,
+      backgroundColor: cal.backgroundColor ?? undefined,
+      foregroundColor: cal.foregroundColor ?? undefined,
+      accessRole: (cal.accessRole as CalendarListEntry["accessRole"]) || "reader",
+      primary: cal.primary ?? undefined,
+    })
+  );
+
+  return {
+    calendars,
+    nextPageToken: response.data.nextPageToken ?? undefined,
+  };
+}
+
+/**
+ * Get a single calendar by ID.
+ */
+export async function getCalendar(
+  accessToken: string,
+  calendarId: string
+): Promise<CalendarListEntry | null> {
+  const calendar = getCalendarClient(accessToken);
+
+  try {
+    const response = await calendar.calendarList.get({
+      calendarId,
+    });
+
+    return {
+      id: response.data.id || calendarId,
+      summary: response.data.summary || "",
+      description: response.data.description ?? undefined,
+      location: response.data.location ?? undefined,
+      timeZone: response.data.timeZone ?? undefined,
+      colorId: response.data.colorId ?? undefined,
+      backgroundColor: response.data.backgroundColor ?? undefined,
+      foregroundColor: response.data.foregroundColor ?? undefined,
+      accessRole:
+        (response.data.accessRole as CalendarListEntry["accessRole"]) || "reader",
+      primary: response.data.primary ?? undefined,
+    };
+  } catch (error) {
+    console.error("Failed to get calendar:", error);
+    return null;
+  }
+}
+
+// ============================================================================
+// Free/Busy Query (requires calendar.readonly scope)
+// ============================================================================
+
+export interface FreeBusyRequestItem {
+  id: string;
+}
+
+export interface FreeBusyOptions {
+  timeMin: string;
+  timeMax: string;
+  timeZone?: string;
+  items: FreeBusyRequestItem[];
+}
+
+export interface FreeBusyPeriod {
+  start: string;
+  end: string;
+}
+
+export interface FreeBusyCalendarResult {
+  busy: FreeBusyPeriod[];
+  errors?: Array<{ domain: string; reason: string }>;
+}
+
+export interface FreeBusyResult {
+  timeMin: string;
+  timeMax: string;
+  calendars: Record<string, FreeBusyCalendarResult>;
+}
+
+/**
+ * Query free/busy information for calendars.
+ */
+export async function queryFreeBusy(
+  accessToken: string,
+  options: FreeBusyOptions
+): Promise<FreeBusyResult> {
+  const calendar = getCalendarClient(accessToken);
+
+  const response = await calendar.freebusy.query({
+    requestBody: {
+      timeMin: options.timeMin,
+      timeMax: options.timeMax,
+      timeZone: options.timeZone,
+      items: options.items,
+    },
+  });
+
+  const calendars: Record<string, FreeBusyCalendarResult> = {};
+
+  if (response.data.calendars) {
+    for (const [calId, calData] of Object.entries(response.data.calendars)) {
+      calendars[calId] = {
+        busy: (calData.busy || []).map((period) => ({
+          start: period.start || "",
+          end: period.end || "",
+        })),
+        errors: calData.errors?.map((e) => ({
+          domain: e.domain || "",
+          reason: e.reason || "",
+        })),
+      };
+    }
+  }
+
+  return {
+    timeMin: response.data.timeMin || options.timeMin,
+    timeMax: response.data.timeMax || options.timeMax,
+    calendars,
+  };
+}
+
+// ============================================================================
+// Quick Add (requires calendar.events scope)
+// ============================================================================
+
+/**
+ * Create an event from natural language text.
+ * Example: "Meeting with Bob tomorrow at 3pm"
+ */
+export async function quickAddEvent(
+  accessToken: string,
+  text: string,
+  calendarId: string = "primary",
+  sendUpdates: "all" | "externalOnly" | "none" = "none"
+): Promise<CalendarEvent> {
+  const calendar = getCalendarClient(accessToken);
+
+  const response = await calendar.events.quickAdd({
+    calendarId,
+    text,
+    sendUpdates,
+  });
+
+  return transformEvent(response.data);
+}

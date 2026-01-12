@@ -4,8 +4,16 @@
  */
 
 import { v } from "convex/values";
-import { internalQuery, internalMutation, internalAction } from "./_generated/server";
+import { query, internalQuery, internalMutation, internalAction } from "./_generated/server";
 import { internal, components } from "./_generated/api";
+import { authComponent } from "./auth";
+
+// OAuth scopes that were added after initial launch (require re-authentication)
+const UPGRADED_SCOPES = [
+  "https://www.googleapis.com/auth/gmail.modify",
+  "https://www.googleapis.com/auth/gmail.labels",
+  "https://www.googleapis.com/auth/gmail.compose",
+];
 
 interface GoogleTokens {
   accessToken: string | null;
@@ -90,6 +98,129 @@ export const updateGoogleTokens = internalMutation({
         ],
       },
     });
+  },
+});
+
+/**
+ * Refresh Google OAuth tokens using the refresh token.
+ * This action calls Google's token endpoint to get new tokens.
+ */
+/**
+ * Check if the current user needs to re-authenticate to get upgraded OAuth scopes.
+ * Returns true if user is logged in but doesn't have the new scopes.
+ * 
+ * NOTE: Currently disabled because Better Auth doesn't store OAuth scopes.
+ * Always returns false to allow all permissions.
+ * TODO: Implement scope storage in Better Auth config to enable this check.
+ */
+export const needsReauthentication = query({
+  args: {},
+  handler: async (_ctx): Promise<boolean> => {
+    // Scope verification is disabled until we can properly store OAuth scopes
+    // All permissions are available to authenticated users
+    return false;
+    
+    // Original implementation (for reference):
+    // Get the authenticated user - wrap in try/catch to handle unauthenticated state
+    /*
+    let user;
+    try {
+      user = await authComponent.getAuthUser(ctx);
+    } catch {
+      return false;
+    }
+    
+    if (!user) {
+      return false;
+    }
+
+    const account = await ctx.runQuery(components.betterAuth.adapter.findOne, {
+      model: "account",
+      where: [
+        { field: "userId", operator: "eq", value: user._id },
+        { field: "providerId", operator: "eq", value: "google", connector: "AND" },
+      ],
+    }) as AccountRecord | null;
+
+    if (!account?.scope) {
+      return false;
+    }
+
+    const userScopes = account.scope.split(" ");
+    const hasAllUpgradedScopes = UPGRADED_SCOPES.every((scope) =>
+      userScopes.includes(scope)
+    );
+
+    return !hasAllUpgradedScopes;
+    */
+  },
+});
+
+/**
+ * Debug query to see what scopes are stored for the current user.
+ * Use this in the Convex dashboard to debug scope issues.
+ */
+export const debugUserScopes = query({
+  args: {},
+  handler: async (ctx): Promise<{ userId: string | null; scopes: string | null; hasUpgradedScopes: boolean; missingScopes: string[] } | null> => {
+    let user;
+    try {
+      user = await authComponent.getAuthUser(ctx);
+    } catch {
+      return null;
+    }
+    
+    if (!user) {
+      return null;
+    }
+
+    const account = await ctx.runQuery(components.betterAuth.adapter.findOne, {
+      model: "account",
+      where: [
+        { field: "userId", operator: "eq", value: user._id },
+        { field: "providerId", operator: "eq", value: "google", connector: "AND" },
+      ],
+    }) as AccountRecord | null;
+
+    const scopes = account?.scope || null;
+    const userScopes = scopes ? scopes.split(" ") : [];
+    const missingScopes = UPGRADED_SCOPES.filter((scope) => !userScopes.includes(scope));
+
+    return {
+      userId: user._id,
+      scopes,
+      hasUpgradedScopes: missingScopes.length === 0,
+      missingScopes,
+    };
+  },
+});
+
+/**
+ * Debug query that takes userId as argument - for use in Convex dashboard.
+ */
+export const debugUserScopesById = query({
+  args: {
+    userId: v.string(),
+  },
+  handler: async (ctx, args): Promise<{ userId: string; scopes: string | null; hasUpgradedScopes: boolean; missingScopes: string[] }> => {
+    const account = await ctx.runQuery(components.betterAuth.adapter.findOne, {
+      model: "account",
+      where: [
+        { field: "userId", operator: "eq", value: args.userId },
+        { field: "providerId", operator: "eq", value: "google", connector: "AND" },
+      ],
+    }) as AccountRecord | null;
+
+    const scopes = account?.scope || null;
+    const userScopes = scopes ? scopes.split(" ") : [];
+    const missingScopes = UPGRADED_SCOPES.filter((scope) => !userScopes.includes(scope));
+
+    return {
+      userId: args.userId,
+      scopes,
+      hasUpgradedScopes: missingScopes.length === 0,
+      missingScopes,
+    };
   },
 });
 

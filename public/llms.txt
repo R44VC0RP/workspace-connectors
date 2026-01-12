@@ -5,6 +5,8 @@
 
 API for accessing connected Google Workspace services.
 
+**Zero Data Retention** — Your data is never stored or logged by our servers. All requests are proxied directly to Google APIs.
+
 ## Authentication
 
 All API requests require an API key passed as a Bearer token in the `Authorization` header:
@@ -30,12 +32,13 @@ All errors return a consistent JSON format:
 }
 ```
 
-| Status | Description                |
-| ------ | -------------------------- |
-| 401    | Invalid or missing API key |
-| 403    | Insufficient permissions   |
-| 429    | Rate limit exceeded        |
-| 500    | Internal server error      |
+| Status | Description                     |
+| ------ | ------------------------------- |
+| 401    | Invalid or missing API key      |
+| 402    | Payment required (upgrade plan) |
+| 403    | Insufficient permissions        |
+| 429    | Rate limit exceeded             |
+| 500    | Internal server error           |
 
 ## Operations
 

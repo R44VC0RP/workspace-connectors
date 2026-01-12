@@ -37,6 +37,7 @@ All errors return a consistent JSON format:
 | Status | Description |
 |--------|-------------|
 | 401 | Invalid or missing API key |
+| 402 | Payment required (upgrade plan) |
 | 403 | Insufficient permissions |
 | 429 | Rate limit exceeded |
 | 500 | Internal server error |

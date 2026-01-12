@@ -1,14 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useQuery } from "convex/react";
 import {
   IconPlus,
   IconTrash,
   IconCopy,
   IconCheck,
   IconKey,
+  IconLock,
 } from "@tabler/icons-react";
 
+import { api } from "@/convex/_generated/api";
 import { apiKey } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -49,10 +52,15 @@ import {
 // Available permission scopes
 const AVAILABLE_SCOPES = {
   google: [
-    { id: "mail:read", label: "Read emails", description: "Read Gmail messages" },
+    // Gmail permissions
+    { id: "mail:read", label: "Read emails", description: "Read Gmail messages, threads, and labels" },
     { id: "mail:send", label: "Send emails", description: "Send emails via Gmail" },
-    { id: "calendar:read", label: "Read calendar", description: "Read calendar events" },
-    { id: "calendar:write", label: "Write calendar", description: "Create/update/delete events" },
+    { id: "mail:modify", label: "Modify emails", description: "Trash/untrash messages, add/remove labels", requiresReauth: true },
+    { id: "mail:labels", label: "Manage labels", description: "Create, update, and delete labels", requiresReauth: true },
+    { id: "mail:drafts", label: "Manage drafts", description: "Create, update, delete, and send drafts", requiresReauth: true },
+    // Calendar permissions
+    { id: "calendar:read", label: "Read calendar", description: "Read calendar events and free/busy info" },
+    { id: "calendar:write", label: "Write calendar", description: "Create/update/delete events, quick add" },
   ],
 };
 
@@ -74,6 +82,9 @@ export default function ApiKeysPage() {
   const [selectedScopes, setSelectedScopes] = useState<string[]>([]);
   const [createdKey, setCreatedKey] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+
+  // Check if user needs to re-authenticate for new scopes
+  const needsReauth = useQuery(api.tokens.needsReauthentication);
 
   // Fetch keys on mount
   useEffect(() => {
@@ -170,6 +181,45 @@ export default function ApiKeysPage() {
     );
   };
 
+  const toggleAllScopesForProvider = (provider: string) => {
+    const providerScopes = AVAILABLE_SCOPES[provider as keyof typeof AVAILABLE_SCOPES] || [];
+    const availableScopes = providerScopes
+      .filter((scope) => {
+        // Only include scopes that aren't locked
+        const isLocked = "requiresReauth" in scope && scope.requiresReauth && needsReauth === true;
+        return !isLocked;
+      })
+      .map((scope) => `${provider}:${scope.id}`);
+    
+    const allSelected = availableScopes.every((scopeId) => selectedScopes.includes(scopeId));
+    
+    if (allSelected) {
+      // Deselect all for this provider
+      setSelectedScopes((prev) => prev.filter((s) => !availableScopes.includes(s)));
+    } else {
+      // Select all available for this provider
+      setSelectedScopes((prev) => [...new Set([...prev, ...availableScopes])]);
+    }
+  };
+
+  const areAllScopesSelectedForProvider = (provider: string): boolean | "indeterminate" => {
+    const providerScopes = AVAILABLE_SCOPES[provider as keyof typeof AVAILABLE_SCOPES] || [];
+    const availableScopes = providerScopes
+      .filter((scope) => {
+        const isLocked = "requiresReauth" in scope && scope.requiresReauth && needsReauth === true;
+        return !isLocked;
+      })
+      .map((scope) => `${provider}:${scope.id}`);
+    
+    if (availableScopes.length === 0) return false;
+    
+    const selectedCount = availableScopes.filter((scopeId) => selectedScopes.includes(scopeId)).length;
+    
+    if (selectedCount === 0) return false;
+    if (selectedCount === availableScopes.length) return true;
+    return "indeterminate";
+  };
+
   const formatDate = (date: Date | string) => {
     return new Date(date).toLocaleDateString("en-US", {
       year: "numeric",
@@ -194,7 +244,7 @@ export default function ApiKeysPage() {
               Create Key
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-md">
+          <DialogContent className="sm:max-w-xl">
             {createdKey ? (
               <>
                 <DialogHeader>
@@ -247,37 +297,85 @@ export default function ApiKeysPage() {
                   </div>
                   <div className="space-y-3">
                     <Label>Permissions</Label>
-                    {Object.entries(AVAILABLE_SCOPES).map(([provider, scopes]) => (
+                    {Object.entries(AVAILABLE_SCOPES).map(([provider, scopes]) => {
+                      const allSelectedState = areAllScopesSelectedForProvider(provider);
+                      return (
                       <div key={provider} className="space-y-2">
-                        <p className="text-sm font-medium capitalize">{provider}</p>
-                        <div className="space-y-2 pl-2">
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id={`${provider}-all`}
+                            checked={allSelectedState === true}
+                            ref={(el) => {
+                              if (el) {
+                                (el as unknown as HTMLInputElement).indeterminate = allSelectedState === "indeterminate";
+                              }
+                            }}
+                            onCheckedChange={() => toggleAllScopesForProvider(provider)}
+                          />
+                          <label
+                            htmlFor={`${provider}-all`}
+                            className="text-sm font-medium capitalize cursor-pointer"
+                          >
+                            {provider}
+                          </label>
+                        </div>
+                        <div className="space-y-2 pl-6">
                           {scopes.map((scope) => {
                             const scopeId = `${provider}:${scope.id}`;
+                            // Only show as locked if we've confirmed user needs re-auth (needsReauth === true)
+                            // If needsReauth is undefined (still loading) or false, show as unlocked
+                            const isLocked = "requiresReauth" in scope && scope.requiresReauth && needsReauth === true;
                             return (
                               <div
                                 key={scopeId}
-                                className="flex items-center space-x-2"
+                                className={`flex items-center space-x-2 ${isLocked ? "opacity-60" : ""}`}
                               >
-                                <Checkbox
-                                  id={scopeId}
-                                  checked={selectedScopes.includes(scopeId)}
-                                  onCheckedChange={() => toggleScope(scopeId)}
-                                />
-                                <label
-                                  htmlFor={scopeId}
-                                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                >
-                                  {scope.label}
-                                  <span className="ml-2 text-xs text-muted-foreground">
-                                    {scope.description}
-                                  </span>
-                                </label>
+                                {isLocked ? (
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <div className="flex items-center space-x-2">
+                                          <div className="h-4 w-4 flex items-center justify-center">
+                                            <IconLock className="h-3.5 w-3.5 text-muted-foreground" />
+                                          </div>
+                                          <span className="text-sm font-medium leading-none text-muted-foreground">
+                                            {scope.label}
+                                            <Badge variant="outline" className="ml-2 text-[10px] px-1 py-0 text-amber-600 border-amber-500/50">
+                                              Re-auth required
+                                            </Badge>
+                                          </span>
+                                        </div>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        <p className="text-xs">Sign out and sign back in to enable this permission</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
+                                ) : (
+                                  <>
+                                    <Checkbox
+                                      id={scopeId}
+                                      checked={selectedScopes.includes(scopeId)}
+                                      onCheckedChange={() => toggleScope(scopeId)}
+                                    />
+                                    <label
+                                      htmlFor={scopeId}
+                                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                    >
+                                      {scope.label}
+                                      <span className="ml-2 text-xs text-muted-foreground">
+                                        {scope.description}
+                                      </span>
+                                    </label>
+                                  </>
+                                )}
                               </div>
                             );
                           })}
                         </div>
                       </div>
-                    ))}
+                    );
+                    })}
                   </div>
                 </div>
                 <DialogFooter>

@@ -9,6 +9,7 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as autumn from "../autumn.js";
 import type * as http from "../http.js";
 import type * as tokens from "../tokens.js";
 
@@ -20,6 +21,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  autumn: typeof autumn;
   http: typeof http;
   tokens: typeof tokens;
 }>;
@@ -2287,4 +2289,5 @@ export declare const components: {
       runTests: FunctionReference<"action", "internal", any, any>;
     };
   };
+  autumn: {};
 };

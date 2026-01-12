@@ -35,7 +35,7 @@ async function verifyApiKey(key: string): Promise<ApiKeyData | null> {
 }
 
 export const apiKeyAuth = new Elysia({ name: "api-key-auth" })
-  .derive(async ({ headers, set }) => {
+  .derive(async ({ headers }) => {
     const apiKeyHeader =
       headers["x-api-key"] || headers["authorization"]?.replace("Bearer ", "");
 

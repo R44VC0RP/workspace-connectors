@@ -3,11 +3,8 @@
  * This module bridges Elysia API routes with Better Auth + Convex.
  */
 
-import { ConvexHttpClient } from "convex/browser";
-import { api, internal } from "@/convex/_generated/api";
-
-// Create a Convex client for server-side usage
-const convexClient = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+// Re-export hasPermission from permissions module for backwards compatibility
+export { hasPermission } from "./permissions";
 
 interface ApiKeyData {
   id: string;
@@ -148,14 +145,4 @@ export async function getUserGoogleTokens(
   }
 }
 
-/**
- * Check if a permission is granted for a specific provider.
- */
-export function hasPermission(
-  permissions: Record<string, string[]>,
-  provider: string,
-  permission: string
-): boolean {
-  const providerPerms = permissions[provider] || [];
-  return providerPerms.includes(permission);
-}
+

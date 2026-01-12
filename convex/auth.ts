@@ -14,14 +14,27 @@ import type { GenericCtx } from "@convex-dev/better-auth";
 const siteUrl = process.env.SITE_URL!;
 
 // Google OAuth scopes for Gmail and Calendar access
+// Note: When adding new scopes, existing users need to re-authenticate
 const GOOGLE_SCOPES = [
   "openid",
   "email",
   "profile",
-  "https://www.googleapis.com/auth/gmail.readonly",
-  "https://www.googleapis.com/auth/gmail.send",
-  "https://www.googleapis.com/auth/calendar.readonly",
-  "https://www.googleapis.com/auth/calendar.events",
+  // Gmail scopes
+  "https://www.googleapis.com/auth/gmail.readonly",   // Read emails, labels, threads
+  "https://www.googleapis.com/auth/gmail.send",       // Send emails
+  "https://www.googleapis.com/auth/gmail.modify",     // Trash/untrash, modify labels on messages
+  "https://www.googleapis.com/auth/gmail.labels",     // Create/delete labels
+  "https://www.googleapis.com/auth/gmail.compose",    // Create/update/delete drafts
+  // Calendar scopes
+  "https://www.googleapis.com/auth/calendar.readonly", // Read calendars and events
+  "https://www.googleapis.com/auth/calendar.events",   // Create/update/delete events
+];
+
+// Scopes that require user re-authentication (added after initial launch)
+export const UPGRADED_SCOPES = [
+  "https://www.googleapis.com/auth/gmail.modify",
+  "https://www.googleapis.com/auth/gmail.labels",
+  "https://www.googleapis.com/auth/gmail.compose",
 ];
 
 // The component client has methods needed for integrating Convex with Better Auth,

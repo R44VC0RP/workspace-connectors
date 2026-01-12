@@ -4,6 +4,7 @@ import { ConvexReactClient } from "convex/react";
 import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react";
 
 import { authClient } from "@/lib/auth-client";
+import { AutumnWrapper } from "./AutumnWrapper";
 
 import type { PropsWithChildren } from "react";
 
@@ -19,7 +20,7 @@ export function ConvexClientProvider({
       authClient={authClient}
       initialToken={initialToken}
     >
-      {children}
+      <AutumnWrapper>{children}</AutumnWrapper>
     </ConvexBetterAuthProvider>
   );
 }
