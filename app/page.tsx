@@ -4,6 +4,7 @@ import { IconExternalLink, IconArrowRight, IconBrandGithub } from "@tabler/icons
 import { Button } from "@/components/ui/button";
 import { CodeExamples } from "@/components/code-examples";
 import { InboundWordmark } from "@/components/inbound-wordmark";
+import { WorkspaceLogo } from "@/components/workspace-logo";
 
 export default function Home() {
   return (
@@ -15,9 +16,12 @@ export default function Home() {
             <span>by</span>
             <InboundWordmark />
           </div>
-          <h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">
-            Workspace Connectors
-          </h1>
+          <div className="mt-4 flex items-center gap-4">
+            <WorkspaceLogo className="h-12 w-12 text-[#8E51FF] sm:h-14 sm:w-14" />
+            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+              Workspace Connectors
+            </h1>
+          </div>
           <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
             A unified API for Google Workspace. Connect your Gmail and Calendar,
             generate scoped API keys, and integrate with any application.

@@ -20,7 +20,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Workspace Connectors",
-  description: "Workspace Connectors App",
+  description: "A unified API for Google Workspace. Connect your Gmail and Calendar, generate scoped API keys, and integrate with any application.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
