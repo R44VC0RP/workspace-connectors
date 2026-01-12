@@ -150,7 +150,19 @@ const DraftListSchema = t.Object({
  */
 const mailAuth = new Elysia({ name: "mail-auth" }).macro({
   mailAuth: {
-    async resolve({ headers, status, set }) {
+    async resolve(context) {
+      // Debug logging for Vercel
+      console.log("[mailAuth] Context keys:", Object.keys(context));
+      console.log("[mailAuth] Headers type:", typeof context.headers);
+      console.log("[mailAuth] Headers value:", JSON.stringify(context.headers));
+      
+      const { headers, status, set } = context;
+      
+      if (!headers) {
+        console.error("[mailAuth] Headers is undefined!");
+        return status(500);
+      }
+      
       const authHeader = headers["authorization"];
       const apiKeyHeader = authHeader?.startsWith("Bearer ")
         ? authHeader.slice(7)
