@@ -69,7 +69,7 @@ const EventSchema = t.Object({
   end: EventTimeSchema,
   attendees: t.Optional(t.Array(EventAttendeeSchema)),
   htmlLink: t.Optional(t.String()),
-  onlineMeetingUrl: t.Optional(t.String()),
+  onlineMeetingUrl: t.Optional(t.Union([t.String(), t.Null()])),
   isAllDay: t.Optional(t.Boolean()),
   isCancelled: t.Optional(t.Boolean()),
   isOrganizer: t.Optional(t.Boolean()),

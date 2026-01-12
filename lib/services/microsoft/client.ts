@@ -36,15 +36,26 @@ export async function graphRequest<T>(
 
   if (!response.ok) {
     const error = await response.text();
+    console.error(`Microsoft Graph API error: ${response.status} - ${error}`);
     throw new Error(`Microsoft Graph API error: ${response.status} - ${error}`);
   }
 
-  // Handle 204 No Content responses
-  if (response.status === 204) {
+  // Handle 202 Accepted (sendMail) and 204 No Content responses
+  if (response.status === 202 || response.status === 204) {
     return {} as T;
   }
 
-  return response.json();
+  const text = await response.text();
+  if (!text) {
+    return {} as T;
+  }
+  
+  try {
+    return JSON.parse(text);
+  } catch {
+    console.error("Failed to parse Graph API response:", text);
+    return {} as T;
+  }
 }
 
 /**
