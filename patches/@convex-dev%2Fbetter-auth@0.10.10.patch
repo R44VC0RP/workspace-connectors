@@ -1,0 +1,108 @@
+diff --git a/dist/auth-options.js b/dist/auth-options.js
+index 406a0a6e9027f5052327e9735a0414eb06ccca5e..b07c4483b9e5e80dd512d51847f5103957953b9e 100644
+--- a/dist/auth-options.js
++++ b/dist/auth-options.js
+@@ -1,4 +1,4 @@
+-import { anonymous, bearer, emailOTP, genericOAuth, jwt, magicLink, oidcProvider, oneTap, oneTimeToken, phoneNumber, twoFactor, username, } from "better-auth/plugins";
++import { anonymous, apiKey, bearer, emailOTP, genericOAuth, jwt, magicLink, oidcProvider, oneTap, oneTimeToken, phoneNumber, twoFactor, username, } from "better-auth/plugins";
+ import { passkey } from "@better-auth/passkey";
+ import { convex } from "./plugins/convex/index.js";
+ import { convexAdapter } from "./client/adapter.js";
+@@ -32,6 +32,7 @@ export const options = {
+         bearer(),
+         oneTimeToken(),
+         jwt(),
++        apiKey(),
+         convex({
+             authConfig: { providers: [{ applicationID: "convex", domain: "" }] },
+         }),
+diff --git a/dist/component/schema.js b/dist/component/schema.js
+index 54a6445a36f4cf219e97bc75c47b3f32b589c1af..b8e4f471af97e2df6fc918d6204cf5b86a9b3cff 100644
+--- a/dist/component/schema.js
++++ b/dist/component/schema.js
+@@ -133,6 +133,30 @@ export const tables = {
+         count: v.optional(v.union(v.null(), v.number())),
+         lastRequest: v.optional(v.union(v.null(), v.number())),
+     }).index("key", ["key"]),
++    apikey: defineTable({
++        name: v.optional(v.union(v.null(), v.string())),
++        key: v.string(),
++        userId: v.string(),
++        prefix: v.optional(v.union(v.null(), v.string())),
++        start: v.optional(v.union(v.null(), v.string())),
++        enabled: v.optional(v.union(v.null(), v.boolean())),
++        rateLimitEnabled: v.optional(v.union(v.null(), v.boolean())),
++        rateLimitTimeWindow: v.optional(v.union(v.null(), v.number())),
++        rateLimitMax: v.optional(v.union(v.null(), v.number())),
++        requestCount: v.optional(v.union(v.null(), v.number())),
++        remaining: v.optional(v.union(v.null(), v.number())),
++        lastRequest: v.optional(v.union(v.null(), v.number())),
++        expiresAt: v.optional(v.union(v.null(), v.number())),
++        permissions: v.optional(v.union(v.null(), v.string())),
++        metadata: v.optional(v.union(v.null(), v.string())),
++        refillInterval: v.optional(v.union(v.null(), v.number())),
++        refillAmount: v.optional(v.union(v.null(), v.number())),
++        lastRefillAt: v.optional(v.union(v.null(), v.number())),
++        createdAt: v.number(),
++        updatedAt: v.number(),
++    })
++        .index("key", ["key"])
++        .index("userId", ["userId"]),
+ };
+ const schema = defineSchema(tables);
+ export default schema;
+diff --git a/src/auth-options.ts b/src/auth-options.ts
+index fa93b799465dc2cd890d0ae53cd225cff2bbb087..0ef4fc47166bf2fd2303967c1ea71b7ff73b8d7b 100644
+--- a/src/auth-options.ts
++++ b/src/auth-options.ts
+@@ -1,6 +1,7 @@
+ import type { BetterAuthOptions } from "better-auth/minimal";
+ import {
+   anonymous,
++  apiKey,
+   bearer,
+   emailOTP,
+   genericOAuth,
+@@ -47,6 +48,7 @@ export const options = {
+     bearer(),
+     oneTimeToken(),
+     jwt(),
++    apiKey(),
+     convex({
+       authConfig: { providers: [{ applicationID: "convex", domain: "" }] },
+     }),
+diff --git a/src/component/schema.ts b/src/component/schema.ts
+index 013f84dcfc78d54e90229ca090a34ad675eb09bd..1ce0c94c5ec4ff6b8c860313d6e6c8a40ae9f936 100644
+--- a/src/component/schema.ts
++++ b/src/component/schema.ts
+@@ -135,6 +135,30 @@ export const tables = {
+     count: v.optional(v.union(v.null(), v.number())),
+     lastRequest: v.optional(v.union(v.null(), v.number())),
+   }).index("key", ["key"]),
++  apikey: defineTable({
++    name: v.optional(v.union(v.null(), v.string())),
++    key: v.string(),
++    userId: v.string(),
++    prefix: v.optional(v.union(v.null(), v.string())),
++    start: v.optional(v.union(v.null(), v.string())),
++    enabled: v.optional(v.union(v.null(), v.boolean())),
++    rateLimitEnabled: v.optional(v.union(v.null(), v.boolean())),
++    rateLimitTimeWindow: v.optional(v.union(v.null(), v.number())),
++    rateLimitMax: v.optional(v.union(v.null(), v.number())),
++    requestCount: v.optional(v.union(v.null(), v.number())),
++    remaining: v.optional(v.union(v.null(), v.number())),
++    lastRequest: v.optional(v.union(v.null(), v.number())),
++    expiresAt: v.optional(v.union(v.null(), v.number())),
++    permissions: v.optional(v.union(v.null(), v.string())),
++    metadata: v.optional(v.union(v.null(), v.string())),
++    refillInterval: v.optional(v.union(v.null(), v.number())),
++    refillAmount: v.optional(v.union(v.null(), v.number())),
++    lastRefillAt: v.optional(v.union(v.null(), v.number())),
++    createdAt: v.number(),
++    updatedAt: v.number(),
++  })
++    .index("key", ["key"])
++    .index("userId", ["userId"]),
+ };
+ 
+ const schema = defineSchema(tables);

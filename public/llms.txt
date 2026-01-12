@@ -1,0 +1,3645 @@
+# Workspace Connectors API
+
+- **OpenAPI Version:** `3.1.1`
+- **API Version:** `1.0.0`
+
+API for accessing connected Google Workspace services.
+
+## Authentication
+
+All API requests require an API key passed as a Bearer token in the `Authorization` header:
+
+```properties
+Authorization: Bearer your_api_key
+```
+
+## Rate Limits
+
+API requests are limited to **100 requests per minute** per API key.
+
+When you exceed the rate limit, you'll receive a `429 Too Many Requests` response.
+
+## Error Responses
+
+All errors return a consistent JSON format:
+
+```json
+{
+  "error": "error_code",
+  "message": "Human readable message"
+}
+```
+
+| Status | Description                |
+| ------ | -------------------------- |
+| 401    | Invalid or missing API key |
+| 403    | Insufficient permissions   |
+| 429    | Rate limit exceeded        |
+| 500    | Internal server error      |
+
+## Operations
+
+### Health check
+
+- **Method:** `GET`
+- **Path:** `/api/v1/health`
+- **Tags:** System
+
+#### Responses
+
+##### Status: 200
+
+### List email messages
+
+- **Method:** `GET`
+- **Path:** `/api/v1/google/mail/messages`
+- **Tags:** Gmail
+
+Retrieve a list of email messages from Gmail
+
+#### Responses
+
+##### Status: 200
+
+###### Content-Type: application/json
+
+- **`messages` (required)**
+
+  `array`
+
+  **Items:**
+
+  - **`id` (required)**
+
+    `string`
+
+  - **`threadId` (required)**
+
+    `string`
+
+  - **`date`**
+
+    `string`
+
+  - **`from`**
+
+    `string`
+
+  - **`snippet`**
+
+    `string`
+
+  - **`subject`**
+
+    `string`
+
+  - **`to`**
+
+    `string`
+
+- **`nextPageToken`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "messages": [
+    {
+      "id": "",
+      "threadId": "",
+      "subject": "",
+      "from": "",
+      "to": "",
+      "date": "",
+      "snippet": ""
+    }
+  ],
+  "nextPageToken": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`messages` (required)**
+
+  `array`
+
+  **Items:**
+
+  - **`id` (required)**
+
+    `string`
+
+  - **`threadId` (required)**
+
+    `string`
+
+  - **`date`**
+
+    `string`
+
+  - **`from`**
+
+    `string`
+
+  - **`snippet`**
+
+    `string`
+
+  - **`subject`**
+
+    `string`
+
+  - **`to`**
+
+    `string`
+
+- **`nextPageToken`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "messages": [
+    {
+      "id": "",
+      "threadId": "",
+      "subject": "",
+      "from": "",
+      "to": "",
+      "date": "",
+      "snippet": ""
+    }
+  ],
+  "nextPageToken": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`messages` (required)**
+
+  `array`
+
+  **Items:**
+
+  - **`id` (required)**
+
+    `string`
+
+  - **`threadId` (required)**
+
+    `string`
+
+  - **`date`**
+
+    `string`
+
+  - **`from`**
+
+    `string`
+
+  - **`snippet`**
+
+    `string`
+
+  - **`subject`**
+
+    `string`
+
+  - **`to`**
+
+    `string`
+
+- **`nextPageToken`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "messages": [
+    {
+      "id": "",
+      "threadId": "",
+      "subject": "",
+      "from": "",
+      "to": "",
+      "date": "",
+      "snippet": ""
+    }
+  ],
+  "nextPageToken": ""
+}
+```
+
+##### Status: 401
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+##### Status: 403
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+### Send email
+
+- **Method:** `POST`
+- **Path:** `/api/v1/google/mail/messages`
+- **Tags:** Gmail
+
+Send a new email message
+
+#### Request Body
+
+##### Content-Type: application/json
+
+- **`body` (required)**
+
+  `string` — Email body (plain text)
+
+- **`subject` (required)**
+
+  `string` — Email subject
+
+- **`to` (required)**
+
+  `object` — Recipient email address(es)
+
+- **`bcc`**
+
+  `object`
+
+- **`cc`**
+
+  `object`
+
+- **`html`**
+
+  `string` — Email body (HTML)
+
+- **`replyTo`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "to": "",
+  "subject": "",
+  "body": "",
+  "html": "",
+  "cc": "",
+  "bcc": "",
+  "replyTo": ""
+}
+```
+
+##### Content-Type: multipart/form-data
+
+- **`body` (required)**
+
+  `string` — Email body (plain text)
+
+- **`subject` (required)**
+
+  `string` — Email subject
+
+- **`to` (required)**
+
+  `object` — Recipient email address(es)
+
+- **`bcc`**
+
+  `object`
+
+- **`cc`**
+
+  `object`
+
+- **`html`**
+
+  `string` — Email body (HTML)
+
+- **`replyTo`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "to": "",
+  "subject": "",
+  "body": "",
+  "html": "",
+  "cc": "",
+  "bcc": "",
+  "replyTo": ""
+}
+```
+
+##### Content-Type: text/plain
+
+- **`body` (required)**
+
+  `string` — Email body (plain text)
+
+- **`subject` (required)**
+
+  `string` — Email subject
+
+- **`to` (required)**
+
+  `object` — Recipient email address(es)
+
+- **`bcc`**
+
+  `object`
+
+- **`cc`**
+
+  `object`
+
+- **`html`**
+
+  `string` — Email body (HTML)
+
+- **`replyTo`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "to": "",
+  "subject": "",
+  "body": "",
+  "html": "",
+  "cc": "",
+  "bcc": "",
+  "replyTo": ""
+}
+```
+
+#### Responses
+
+##### Status: 200
+
+###### Content-Type: application/json
+
+- **`id` (required)**
+
+  `string`
+
+- **`threadId` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "id": "",
+  "threadId": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`id` (required)**
+
+  `string`
+
+- **`threadId` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "id": "",
+  "threadId": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`id` (required)**
+
+  `string`
+
+- **`threadId` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "id": "",
+  "threadId": ""
+}
+```
+
+##### Status: 401
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+##### Status: 403
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+### Get email message
+
+- **Method:** `GET`
+- **Path:** `/api/v1/google/mail/messages/{id}`
+- **Tags:** Gmail
+
+Retrieve a specific email message by ID
+
+#### Responses
+
+##### Status: 200
+
+###### Content-Type: application/json
+
+- **`id` (required)**
+
+  `string`
+
+- **`threadId` (required)**
+
+  `string`
+
+- **`body`**
+
+  `string`
+
+- **`bodyHtml`**
+
+  `string`
+
+- **`date`**
+
+  `string`
+
+- **`from`**
+
+  `string`
+
+- **`subject`**
+
+  `string`
+
+- **`to`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "id": "",
+  "threadId": "",
+  "subject": "",
+  "from": "",
+  "to": "",
+  "date": "",
+  "body": "",
+  "bodyHtml": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`id` (required)**
+
+  `string`
+
+- **`threadId` (required)**
+
+  `string`
+
+- **`body`**
+
+  `string`
+
+- **`bodyHtml`**
+
+  `string`
+
+- **`date`**
+
+  `string`
+
+- **`from`**
+
+  `string`
+
+- **`subject`**
+
+  `string`
+
+- **`to`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "id": "",
+  "threadId": "",
+  "subject": "",
+  "from": "",
+  "to": "",
+  "date": "",
+  "body": "",
+  "bodyHtml": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`id` (required)**
+
+  `string`
+
+- **`threadId` (required)**
+
+  `string`
+
+- **`body`**
+
+  `string`
+
+- **`bodyHtml`**
+
+  `string`
+
+- **`date`**
+
+  `string`
+
+- **`from`**
+
+  `string`
+
+- **`subject`**
+
+  `string`
+
+- **`to`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "id": "",
+  "threadId": "",
+  "subject": "",
+  "from": "",
+  "to": "",
+  "date": "",
+  "body": "",
+  "bodyHtml": ""
+}
+```
+
+##### Status: 401
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+##### Status: 403
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+##### Status: 404
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+### List calendar events
+
+- **Method:** `GET`
+- **Path:** `/api/v1/google/calendar/events`
+- **Tags:** Calendar
+
+Retrieve a list of calendar events
+
+#### Responses
+
+##### Status: 200
+
+###### Content-Type: application/json
+
+- **`events` (required)**
+
+  `array`
+
+  **Items:**
+
+  - **`end` (required)**
+
+    `object`
+
+    - **`date`**
+
+      `string`
+
+    - **`dateTime`**
+
+      `string`
+
+    - **`timeZone`**
+
+      `string`
+
+  - **`id` (required)**
+
+    `string`
+
+  - **`start` (required)**
+
+    `object`
+
+    - **`date`**
+
+      `string`
+
+    - **`dateTime`**
+
+      `string`
+
+    - **`timeZone`**
+
+      `string`
+
+  - **`attendees`**
+
+    `array`
+
+    **Items:**
+
+    - **`email` (required)**
+
+      `string`
+
+    - **`responseStatus`**
+
+      `string`
+
+  - **`description`**
+
+    `string`
+
+  - **`hangoutLink`**
+
+    `string`
+
+  - **`htmlLink`**
+
+    `string`
+
+  - **`location`**
+
+    `string`
+
+  - **`summary`**
+
+    `string`
+
+- **`nextPageToken`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "events": [
+    {
+      "id": "",
+      "summary": "",
+      "description": "",
+      "location": "",
+      "start": {
+        "dateTime": "",
+        "date": "",
+        "timeZone": ""
+      },
+      "end": {
+        "dateTime": "",
+        "date": "",
+        "timeZone": ""
+      },
+      "attendees": [
+        {
+          "email": "",
+          "responseStatus": ""
+        }
+      ],
+      "htmlLink": "",
+      "hangoutLink": ""
+    }
+  ],
+  "nextPageToken": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`events` (required)**
+
+  `array`
+
+  **Items:**
+
+  - **`end` (required)**
+
+    `object`
+
+    - **`date`**
+
+      `string`
+
+    - **`dateTime`**
+
+      `string`
+
+    - **`timeZone`**
+
+      `string`
+
+  - **`id` (required)**
+
+    `string`
+
+  - **`start` (required)**
+
+    `object`
+
+    - **`date`**
+
+      `string`
+
+    - **`dateTime`**
+
+      `string`
+
+    - **`timeZone`**
+
+      `string`
+
+  - **`attendees`**
+
+    `array`
+
+    **Items:**
+
+    - **`email` (required)**
+
+      `string`
+
+    - **`responseStatus`**
+
+      `string`
+
+  - **`description`**
+
+    `string`
+
+  - **`hangoutLink`**
+
+    `string`
+
+  - **`htmlLink`**
+
+    `string`
+
+  - **`location`**
+
+    `string`
+
+  - **`summary`**
+
+    `string`
+
+- **`nextPageToken`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "events": [
+    {
+      "id": "",
+      "summary": "",
+      "description": "",
+      "location": "",
+      "start": {
+        "dateTime": "",
+        "date": "",
+        "timeZone": ""
+      },
+      "end": {
+        "dateTime": "",
+        "date": "",
+        "timeZone": ""
+      },
+      "attendees": [
+        {
+          "email": "",
+          "responseStatus": ""
+        }
+      ],
+      "htmlLink": "",
+      "hangoutLink": ""
+    }
+  ],
+  "nextPageToken": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`events` (required)**
+
+  `array`
+
+  **Items:**
+
+  - **`end` (required)**
+
+    `object`
+
+    - **`date`**
+
+      `string`
+
+    - **`dateTime`**
+
+      `string`
+
+    - **`timeZone`**
+
+      `string`
+
+  - **`id` (required)**
+
+    `string`
+
+  - **`start` (required)**
+
+    `object`
+
+    - **`date`**
+
+      `string`
+
+    - **`dateTime`**
+
+      `string`
+
+    - **`timeZone`**
+
+      `string`
+
+  - **`attendees`**
+
+    `array`
+
+    **Items:**
+
+    - **`email` (required)**
+
+      `string`
+
+    - **`responseStatus`**
+
+      `string`
+
+  - **`description`**
+
+    `string`
+
+  - **`hangoutLink`**
+
+    `string`
+
+  - **`htmlLink`**
+
+    `string`
+
+  - **`location`**
+
+    `string`
+
+  - **`summary`**
+
+    `string`
+
+- **`nextPageToken`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "events": [
+    {
+      "id": "",
+      "summary": "",
+      "description": "",
+      "location": "",
+      "start": {
+        "dateTime": "",
+        "date": "",
+        "timeZone": ""
+      },
+      "end": {
+        "dateTime": "",
+        "date": "",
+        "timeZone": ""
+      },
+      "attendees": [
+        {
+          "email": "",
+          "responseStatus": ""
+        }
+      ],
+      "htmlLink": "",
+      "hangoutLink": ""
+    }
+  ],
+  "nextPageToken": ""
+}
+```
+
+##### Status: 401
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+##### Status: 403
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+### Create calendar event
+
+- **Method:** `POST`
+- **Path:** `/api/v1/google/calendar/events`
+- **Tags:** Calendar
+
+Create a new calendar event
+
+#### Request Body
+
+##### Content-Type: application/json
+
+- **`end` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string` — Date (YYYY-MM-DD) for all-day events
+
+  - **`dateTime`**
+
+    `string` — ISO 8601 datetime
+
+  - **`timeZone`**
+
+    `string`
+
+- **`start` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string` — Date (YYYY-MM-DD) for all-day events
+
+  - **`dateTime`**
+
+    `string` — ISO 8601 datetime
+
+  - **`timeZone`**
+
+    `string`
+
+- **`summary` (required)**
+
+  `string` — Event title
+
+- **`attendees`**
+
+  `array`
+
+  **Items:**
+
+  - **`email` (required)**
+
+    `string`
+
+- **`conferenceData`**
+
+  `boolean` — Add Google Meet link
+
+- **`description`**
+
+  `string`
+
+- **`location`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "summary": "",
+  "description": "",
+  "location": "",
+  "start": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "end": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "attendees": [
+    {
+      "email": ""
+    }
+  ],
+  "conferenceData": true
+}
+```
+
+##### Content-Type: multipart/form-data
+
+- **`end` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string` — Date (YYYY-MM-DD) for all-day events
+
+  - **`dateTime`**
+
+    `string` — ISO 8601 datetime
+
+  - **`timeZone`**
+
+    `string`
+
+- **`start` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string` — Date (YYYY-MM-DD) for all-day events
+
+  - **`dateTime`**
+
+    `string` — ISO 8601 datetime
+
+  - **`timeZone`**
+
+    `string`
+
+- **`summary` (required)**
+
+  `string` — Event title
+
+- **`attendees`**
+
+  `array`
+
+  **Items:**
+
+  - **`email` (required)**
+
+    `string`
+
+- **`conferenceData`**
+
+  `boolean` — Add Google Meet link
+
+- **`description`**
+
+  `string`
+
+- **`location`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "summary": "",
+  "description": "",
+  "location": "",
+  "start": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "end": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "attendees": [
+    {
+      "email": ""
+    }
+  ],
+  "conferenceData": true
+}
+```
+
+##### Content-Type: text/plain
+
+- **`end` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string` — Date (YYYY-MM-DD) for all-day events
+
+  - **`dateTime`**
+
+    `string` — ISO 8601 datetime
+
+  - **`timeZone`**
+
+    `string`
+
+- **`start` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string` — Date (YYYY-MM-DD) for all-day events
+
+  - **`dateTime`**
+
+    `string` — ISO 8601 datetime
+
+  - **`timeZone`**
+
+    `string`
+
+- **`summary` (required)**
+
+  `string` — Event title
+
+- **`attendees`**
+
+  `array`
+
+  **Items:**
+
+  - **`email` (required)**
+
+    `string`
+
+- **`conferenceData`**
+
+  `boolean` — Add Google Meet link
+
+- **`description`**
+
+  `string`
+
+- **`location`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "summary": "",
+  "description": "",
+  "location": "",
+  "start": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "end": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "attendees": [
+    {
+      "email": ""
+    }
+  ],
+  "conferenceData": true
+}
+```
+
+#### Responses
+
+##### Status: 201
+
+###### Content-Type: application/json
+
+- **`end` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`id` (required)**
+
+  `string`
+
+- **`start` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`attendees`**
+
+  `array`
+
+  **Items:**
+
+  - **`email` (required)**
+
+    `string`
+
+  - **`responseStatus`**
+
+    `string`
+
+- **`description`**
+
+  `string`
+
+- **`hangoutLink`**
+
+  `string`
+
+- **`htmlLink`**
+
+  `string`
+
+- **`location`**
+
+  `string`
+
+- **`summary`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "id": "",
+  "summary": "",
+  "description": "",
+  "location": "",
+  "start": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "end": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "attendees": [
+    {
+      "email": "",
+      "responseStatus": ""
+    }
+  ],
+  "htmlLink": "",
+  "hangoutLink": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`end` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`id` (required)**
+
+  `string`
+
+- **`start` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`attendees`**
+
+  `array`
+
+  **Items:**
+
+  - **`email` (required)**
+
+    `string`
+
+  - **`responseStatus`**
+
+    `string`
+
+- **`description`**
+
+  `string`
+
+- **`hangoutLink`**
+
+  `string`
+
+- **`htmlLink`**
+
+  `string`
+
+- **`location`**
+
+  `string`
+
+- **`summary`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "id": "",
+  "summary": "",
+  "description": "",
+  "location": "",
+  "start": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "end": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "attendees": [
+    {
+      "email": "",
+      "responseStatus": ""
+    }
+  ],
+  "htmlLink": "",
+  "hangoutLink": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`end` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`id` (required)**
+
+  `string`
+
+- **`start` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`attendees`**
+
+  `array`
+
+  **Items:**
+
+  - **`email` (required)**
+
+    `string`
+
+  - **`responseStatus`**
+
+    `string`
+
+- **`description`**
+
+  `string`
+
+- **`hangoutLink`**
+
+  `string`
+
+- **`htmlLink`**
+
+  `string`
+
+- **`location`**
+
+  `string`
+
+- **`summary`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "id": "",
+  "summary": "",
+  "description": "",
+  "location": "",
+  "start": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "end": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "attendees": [
+    {
+      "email": "",
+      "responseStatus": ""
+    }
+  ],
+  "htmlLink": "",
+  "hangoutLink": ""
+}
+```
+
+##### Status: 401
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+##### Status: 403
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+### Get calendar event
+
+- **Method:** `GET`
+- **Path:** `/api/v1/google/calendar/events/{id}`
+- **Tags:** Calendar
+
+Retrieve a specific calendar event by ID
+
+#### Responses
+
+##### Status: 200
+
+###### Content-Type: application/json
+
+- **`end` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`id` (required)**
+
+  `string`
+
+- **`start` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`attendees`**
+
+  `array`
+
+  **Items:**
+
+  - **`email` (required)**
+
+    `string`
+
+  - **`responseStatus`**
+
+    `string`
+
+- **`description`**
+
+  `string`
+
+- **`hangoutLink`**
+
+  `string`
+
+- **`htmlLink`**
+
+  `string`
+
+- **`location`**
+
+  `string`
+
+- **`summary`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "id": "",
+  "summary": "",
+  "description": "",
+  "location": "",
+  "start": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "end": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "attendees": [
+    {
+      "email": "",
+      "responseStatus": ""
+    }
+  ],
+  "htmlLink": "",
+  "hangoutLink": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`end` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`id` (required)**
+
+  `string`
+
+- **`start` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`attendees`**
+
+  `array`
+
+  **Items:**
+
+  - **`email` (required)**
+
+    `string`
+
+  - **`responseStatus`**
+
+    `string`
+
+- **`description`**
+
+  `string`
+
+- **`hangoutLink`**
+
+  `string`
+
+- **`htmlLink`**
+
+  `string`
+
+- **`location`**
+
+  `string`
+
+- **`summary`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "id": "",
+  "summary": "",
+  "description": "",
+  "location": "",
+  "start": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "end": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "attendees": [
+    {
+      "email": "",
+      "responseStatus": ""
+    }
+  ],
+  "htmlLink": "",
+  "hangoutLink": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`end` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`id` (required)**
+
+  `string`
+
+- **`start` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`attendees`**
+
+  `array`
+
+  **Items:**
+
+  - **`email` (required)**
+
+    `string`
+
+  - **`responseStatus`**
+
+    `string`
+
+- **`description`**
+
+  `string`
+
+- **`hangoutLink`**
+
+  `string`
+
+- **`htmlLink`**
+
+  `string`
+
+- **`location`**
+
+  `string`
+
+- **`summary`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "id": "",
+  "summary": "",
+  "description": "",
+  "location": "",
+  "start": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "end": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "attendees": [
+    {
+      "email": "",
+      "responseStatus": ""
+    }
+  ],
+  "htmlLink": "",
+  "hangoutLink": ""
+}
+```
+
+##### Status: 401
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+##### Status: 403
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+##### Status: 404
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+### Update calendar event
+
+- **Method:** `PATCH`
+- **Path:** `/api/v1/google/calendar/events/{id}`
+- **Tags:** Calendar
+
+Update an existing calendar event
+
+#### Request Body
+
+##### Content-Type: application/json
+
+- **`attendees`**
+
+  `array`
+
+  **Items:**
+
+  - **`email` (required)**
+
+    `string`
+
+- **`description`**
+
+  `string`
+
+- **`end`**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`location`**
+
+  `string`
+
+- **`start`**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`summary`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "summary": "",
+  "description": "",
+  "location": "",
+  "start": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "end": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "attendees": [
+    {
+      "email": ""
+    }
+  ]
+}
+```
+
+##### Content-Type: multipart/form-data
+
+- **`attendees`**
+
+  `array`
+
+  **Items:**
+
+  - **`email` (required)**
+
+    `string`
+
+- **`description`**
+
+  `string`
+
+- **`end`**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`location`**
+
+  `string`
+
+- **`start`**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`summary`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "summary": "",
+  "description": "",
+  "location": "",
+  "start": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "end": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "attendees": [
+    {
+      "email": ""
+    }
+  ]
+}
+```
+
+##### Content-Type: text/plain
+
+- **`attendees`**
+
+  `array`
+
+  **Items:**
+
+  - **`email` (required)**
+
+    `string`
+
+- **`description`**
+
+  `string`
+
+- **`end`**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`location`**
+
+  `string`
+
+- **`start`**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`summary`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "summary": "",
+  "description": "",
+  "location": "",
+  "start": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "end": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "attendees": [
+    {
+      "email": ""
+    }
+  ]
+}
+```
+
+#### Responses
+
+##### Status: 200
+
+###### Content-Type: application/json
+
+- **`end` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`id` (required)**
+
+  `string`
+
+- **`start` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`attendees`**
+
+  `array`
+
+  **Items:**
+
+  - **`email` (required)**
+
+    `string`
+
+  - **`responseStatus`**
+
+    `string`
+
+- **`description`**
+
+  `string`
+
+- **`hangoutLink`**
+
+  `string`
+
+- **`htmlLink`**
+
+  `string`
+
+- **`location`**
+
+  `string`
+
+- **`summary`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "id": "",
+  "summary": "",
+  "description": "",
+  "location": "",
+  "start": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "end": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "attendees": [
+    {
+      "email": "",
+      "responseStatus": ""
+    }
+  ],
+  "htmlLink": "",
+  "hangoutLink": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`end` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`id` (required)**
+
+  `string`
+
+- **`start` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`attendees`**
+
+  `array`
+
+  **Items:**
+
+  - **`email` (required)**
+
+    `string`
+
+  - **`responseStatus`**
+
+    `string`
+
+- **`description`**
+
+  `string`
+
+- **`hangoutLink`**
+
+  `string`
+
+- **`htmlLink`**
+
+  `string`
+
+- **`location`**
+
+  `string`
+
+- **`summary`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "id": "",
+  "summary": "",
+  "description": "",
+  "location": "",
+  "start": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "end": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "attendees": [
+    {
+      "email": "",
+      "responseStatus": ""
+    }
+  ],
+  "htmlLink": "",
+  "hangoutLink": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`end` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`id` (required)**
+
+  `string`
+
+- **`start` (required)**
+
+  `object`
+
+  - **`date`**
+
+    `string`
+
+  - **`dateTime`**
+
+    `string`
+
+  - **`timeZone`**
+
+    `string`
+
+- **`attendees`**
+
+  `array`
+
+  **Items:**
+
+  - **`email` (required)**
+
+    `string`
+
+  - **`responseStatus`**
+
+    `string`
+
+- **`description`**
+
+  `string`
+
+- **`hangoutLink`**
+
+  `string`
+
+- **`htmlLink`**
+
+  `string`
+
+- **`location`**
+
+  `string`
+
+- **`summary`**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "id": "",
+  "summary": "",
+  "description": "",
+  "location": "",
+  "start": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "end": {
+    "dateTime": "",
+    "date": "",
+    "timeZone": ""
+  },
+  "attendees": [
+    {
+      "email": "",
+      "responseStatus": ""
+    }
+  ],
+  "htmlLink": "",
+  "hangoutLink": ""
+}
+```
+
+##### Status: 401
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+##### Status: 403
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+##### Status: 404
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+### Delete calendar event
+
+- **Method:** `DELETE`
+- **Path:** `/api/v1/google/calendar/events/{id}`
+- **Tags:** Calendar
+
+Delete a calendar event
+
+#### Responses
+
+##### Status: 200
+
+###### Content-Type: application/json
+
+- **`success` (required)**
+
+  `boolean`
+
+**Example:**
+
+```json
+{
+  "success": true
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`success` (required)**
+
+  `boolean`
+
+**Example:**
+
+```json
+{
+  "success": true
+}
+```
+
+###### Content-Type: text/plain
+
+- **`success` (required)**
+
+  `boolean`
+
+**Example:**
+
+```json
+{
+  "success": true
+}
+```
+
+##### Status: 401
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+##### Status: 403
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+##### Status: 404
+
+###### Content-Type: application/json
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: multipart/form-data
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
+
+###### Content-Type: text/plain
+
+- **`error` (required)**
+
+  `string`
+
+- **`message` (required)**
+
+  `string`
+
+**Example:**
+
+```json
+{
+  "error": "",
+  "message": ""
+}
+```
